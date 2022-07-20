@@ -8,27 +8,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/employee")
 public class EmployeeController {
     private static final Logger LOG = LoggerFactory.getLogger(EmployeeController.class);
 
     @Autowired
     private EmployeeService employeeService;
 
-    @PostMapping("/employee")
+    @PostMapping
     public Employee create(@RequestBody Employee employee) {
         LOG.debug("Received employee create request for [{}]", employee);
 
         return employeeService.create(employee);
     }
 
-    @GetMapping("/employee/{id}")
+    @GetMapping("/{id}")
     public Employee read(@PathVariable String id) {
         LOG.debug("Received employee read request for id [{}]", id);
 
         return employeeService.read(id);
     }
 
-    @PutMapping("/employee/{id}")
+    @PutMapping("/{id}")
     public Employee update(@PathVariable String id, @RequestBody Employee employee) {
         LOG.debug("Received employee update request for id [{}] and employee [{}]", id, employee);
 
