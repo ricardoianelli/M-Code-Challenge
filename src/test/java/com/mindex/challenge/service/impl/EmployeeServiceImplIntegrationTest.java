@@ -20,7 +20,7 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class EmployeeServiceImplTest {
+public class EmployeeServiceImplIntegrationTest {
 
     private String employeeUrl;
     private String employeeIdUrl;
