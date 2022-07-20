@@ -1,7 +1,9 @@
 <h1 align="center">
     Code Challenge - Company M.
 </h1>
-
+<h3 align="center">
+    Candidate: Ricardo Ianelli
+</h3>
 
 ## #️⃣ Glossary #️⃣
 - [About](#-about-)
