@@ -1,12 +1,29 @@
-# Coding Challenge
-## What's Provided
+<h1 align="center">
+    Code Challenge - Company M.
+</h1>
+<h3 align="center">
+    Candidate: Ricardo Ianelli
+</h3>
+
+## #️⃣ Glossary #️⃣
+- [About](#-about-)
+- [The Challenge](#-the-challenge-)
+  - [How to Use](#how-to-use)
+  - [Task 1](#task-1)
+  - [Task 2](#task-2)
+- [About the solution](#-about-the-solution-)
+- [Running it](#-running-it-)
+- [Tasks Backlog](#-tasks-backlog-)
+
+## 📚 About 📚
+This is the code challenge given during an interview process for a company M.
+
+### 🔥 The Challenge 🔥
+
 A simple [Spring Boot](https://projects.spring.io/spring-boot/) web application has been created and bootstrapped 
 with data. The application contains information about all employees at a company. On application start-up, an in-memory 
 Mongo database is bootstrapped with a serialized snapshot of the database. While the application runs, the data may be
 accessed and mutated in the database without impacting the snapshot.
-
-### How to Run
-The application may be executed by running `gradlew bootRun`.
 
 ### How to Use
 The following endpoints are available to use:
@@ -55,9 +72,6 @@ The Employee has a JSON schema of:
 ```
 For all endpoints that require an "id" in the URL, this is the "employeeId" field.
 
-## What to Implement
-Clone or download the repository, do not fork it.
-
 ### Task 1
 Create a new type, ReportingStructure, that has two properties: employee and numberOfReports.
 
@@ -82,5 +96,15 @@ Create a new type, Compensation. A Compensation has the following fields: employ
 two new Compensation REST endpoints. One to create and one to read by employeeId. These should persist and query the 
 Compensation from the persistence layer.
 
-## Delivery
-Please upload your results to a publicly accessible Git repo. Free ones are provided by Github and Bitbucket.
+
+## ⭐ About the solution ⭐
+
+## 🚀 Running it 🚀
+- The application may be executed by running `gradlew bootRun`.
+
+## 🚧 Tasks Backlog 🚧
+- [ ] Create unit tests for EmployeeController methods
+- [ ] Create unit tests for EmployeeServiceImpl
+- [ ] Dockerize application
+- [ ] Add Swagger API documentation
+- [ ] Include CI with GitHub actions
