@@ -2,10 +2,21 @@
     Code Challenge - Company M.
 </h1>
 
+
+## #️⃣ Glossary #️⃣
+- [About](#-about-)
+- [The Challenge](#-the-challenge-)
+  - [How to Use](#how-to-use)
+  - [Task 1](#task-1)
+  - [Task 2](#task-2)
+- [About the solution](#-about-the-solution-)
+- [Running it](#-running-it-)
+- [Tasks Backlog](#-tasks-backlog-)
+
 ## 📚 About 📚
 This is the code challenge given during an interview process for a company M.
 
-## 🔥 The Challenge 🔥
+### 🔥 The Challenge 🔥
 
 A simple [Spring Boot](https://projects.spring.io/spring-boot/) web application has been created and bootstrapped 
 with data. The application contains information about all employees at a company. On application start-up, an in-memory 
