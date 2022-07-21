@@ -108,7 +108,7 @@ Compensation from the persistence layer.
 - [x] Refactor controller to respect REST best practices
 - [x] Use DTOs to avoid coupling
 - [x] Create Adapter tests and implementation
-- [ ] Add Postman Collection
+- [x] Add Postman Collection
 - [ ] Add application design overview
 - [ ] Dockerize application
 - [ ] Add Swagger API documentation
