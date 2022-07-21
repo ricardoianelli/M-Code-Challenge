@@ -5,7 +5,12 @@ import com.mindex.challenge.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/employee")
@@ -16,10 +21,16 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping
-    public Employee create(@RequestBody Employee employee) {
+    public ResponseEntity<?> create(@RequestBody Employee employee) {
         LOG.debug("Received employee create request for [{}]", employee);
-
-        return employeeService.create(employee);
+        try {
+            Employee createdEmployee = employeeService.create(employee);
+            return ResponseEntity
+                    .created(new URI("/employee/" + createdEmployee.getEmployeeId()))
+                    .body(createdEmployee);
+        } catch (URISyntaxException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/{id}")
