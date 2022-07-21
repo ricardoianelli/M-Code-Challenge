@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class DataBootstrapTest {
+public class DataBootstrapTests {
 
     @Autowired
     private EmployeeRepository employeeRepository;
