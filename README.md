@@ -107,6 +107,8 @@ Since I wanted to do TDD (Test Driven Development), I decided to start creating 
 
 After this initial tests creation, I've created tests for an EmployeeDto and EmployeeAdapter classes, and after that I started the creation of the actual EmployeeDto and EmployeeAdapter, responsible to decouple the domain from external clients and give more flexibility during the lifetime of the project, and was safe since I had tests to back me up during the entire process.
 
+There's also a Postman collection to make it easier to test the web api's.
+
 
 ## 🏛️ Architecture 🏛️
 
