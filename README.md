@@ -127,6 +127,7 @@ Here's a simple overview diagram of the application (showing only the most impor
 - [x] Create Adapter tests and implementation
 - [x] Add Postman Collection
 - [x] Add application design overview
+- [x] Create ReportingStructure tests
 - [x] Create ReportingStructure DTO
 - [x] Create ReportingStructure DTO service tests
 - [x] Create ReportingStructure DTO service
