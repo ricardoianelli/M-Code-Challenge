@@ -1,0 +1,71 @@
+package com.mindex.challenge.controller;
+
+import com.mindex.challenge.data.Employee;
+import com.mindex.challenge.exceptions.EmployeeNotFoundException;
+import com.mindex.challenge.service.EmployeeService;
+import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+@RunWith(SpringRunner.class)
+@WebMvcTest(EmployeeController.class)
+@AutoConfigureMockMvc
+public class EmployeeControllerTests {
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @MockBean
+    EmployeeService employeeService;
+
+    final String BASE_ROUTE = "/employee";
+
+    @Test
+    @DisplayName("Smoke test for Spring DI")
+    public void contextLoads() {
+        assertThat(mockMvc).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Read endpoint with valid id returns employee and 200")
+    public void read_givenAValidId_ShouldReturnEmployeeAnd200() throws Exception {
+
+        final String employeeId = "123";
+        Employee exampleEmployee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+
+        when(employeeService.read(employeeId)).thenReturn(exampleEmployee);
+
+        mockMvc.perform(get(BASE_ROUTE + "/" + employeeId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.employeeId").value(employeeId));
+    }
+
+    @Test
+    @DisplayName("Read endpoint with invalid id returns error and 404")
+    public void read_givenANotExistentId_ShouldReturn404() throws Exception {
+        when(employeeService.read(anyString())).thenThrow(EmployeeNotFoundException.class);
+
+        mockMvc.perform(get(BASE_ROUTE + "/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Employee not found"));
+    }
+
+
+}
