@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -83,7 +84,7 @@ public class EmployeeControllerTests {
         final String employeeId = "123";
         Employee exampleEmployee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
 
-        when(employeeService.read(employeeId)).thenReturn(exampleEmployee);
+        when(employeeService.create(any())).thenReturn(exampleEmployee);
 
         mockMvc.perform(post(BASE_ROUTE)
                 .contentType(MediaType.APPLICATION_JSON)
