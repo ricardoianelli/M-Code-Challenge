@@ -103,7 +103,7 @@ Compensation from the persistence layer.
 - The application may be executed by running `gradlew bootRun`.
 
 ## 🚧 Tasks Backlog 🚧
-- [ ] Create unit tests for EmployeeController methods
+- [x] Create unit tests for EmployeeController methods
 - [ ] Create unit tests for EmployeeServiceImpl
 - [ ] Refactor controller to respect REST best practices
 - [ ] Add application design overview
