@@ -52,7 +52,7 @@ public class ReportingStructureServiceImplTests {
         when(employeeAdapter.entityToDto(any())).thenReturn(employeeDto);
         when(employeeRepository.findByEmployeeId(anyString())).thenReturn(new Employee());
 
-        ReportingStructure fetched = reportingStructureService.read(employeeId);
+        ReportingStructure fetched = reportingStructureService.generate(employeeId);
         EmployeeComparer.compareDtos(fetched.employee, expected.employee);
         assertEquals(fetched.numberOfReports, expected.numberOfReports);
 
@@ -66,7 +66,7 @@ public class ReportingStructureServiceImplTests {
 
         when(employeeRepository.findByEmployeeId(anyString())).thenReturn(null);
 
-        assertThrows(EmployeeNotFoundException.class, () -> reportingStructureService.read(employeeId));
+        assertThrows(EmployeeNotFoundException.class, () -> reportingStructureService.generate(employeeId));
 
         verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
     }
