@@ -4,10 +4,8 @@ import com.mindex.challenge.adapter.EmployeeAdapter;
 import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.EmployeeDto;
-import com.mindex.challenge.dto.ReportingStructureDto;
-import com.mindex.challenge.exceptions.DirectReportEmployeeNotFoundException;
+import com.mindex.challenge.dto.ReportingStructure;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
-import com.mindex.challenge.service.EmployeeService;
 import com.mindex.challenge.service.ReportingStructureService;
 import com.mindex.challenge.utils.EmployeeComparer;
 import org.junit.Test;
@@ -49,12 +47,12 @@ public class ReportingStructureServiceImplTests {
 
         final String employeeId = "1";
         EmployeeDto employeeDto = new EmployeeDto(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
-        ReportingStructureDto expected = new ReportingStructureDto(employeeDto);
+        ReportingStructure expected = new ReportingStructure(employeeDto);
 
         when(employeeAdapter.entityToDto(any())).thenReturn(employeeDto);
         when(employeeRepository.findByEmployeeId(anyString())).thenReturn(new Employee());
 
-        ReportingStructureDto fetched = reportingStructureService.read(employeeId);
+        ReportingStructure fetched = reportingStructureService.read(employeeId);
         EmployeeComparer.compareDtos(fetched.employee, expected.employee);
         assertEquals(fetched.numberOfReports, expected.numberOfReports);
 

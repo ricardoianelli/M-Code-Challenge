@@ -4,16 +4,13 @@ import com.mindex.challenge.adapter.EmployeeAdapter;
 import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.EmployeeDto;
-import com.mindex.challenge.dto.ReportingStructureDto;
+import com.mindex.challenge.dto.ReportingStructure;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
-import com.mindex.challenge.service.EmployeeService;
 import com.mindex.challenge.service.ReportingStructureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class ReportingStructureServiceImpl implements ReportingStructureService {
@@ -25,7 +22,7 @@ public class ReportingStructureServiceImpl implements ReportingStructureService 
     private EmployeeRepository employeeRepository;
 
     @Override
-    public ReportingStructureDto read(String employeeId) {
+    public ReportingStructure read(String employeeId) {
         LOG.debug("Getting employee with id [{}] from the database", employeeId);
 
         Employee employee = employeeRepository.findByEmployeeId(employeeId);
@@ -34,9 +31,9 @@ public class ReportingStructureServiceImpl implements ReportingStructureService 
         }
 
         EmployeeDto dto = employeeAdapter.entityToDto(employee);
-        ReportingStructureDto reportingStructureDto = new ReportingStructureDto(dto);
+        ReportingStructure reportingStructure = new ReportingStructure(dto);
 
         LOG.debug("Returning reporting structure for employee with id [{}]", employee);
-        return reportingStructureDto;
+        return reportingStructure;
     }
 }

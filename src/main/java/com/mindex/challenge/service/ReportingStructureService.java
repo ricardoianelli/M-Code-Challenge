@@ -1,7 +1,7 @@
 package com.mindex.challenge.service;
 
-import com.mindex.challenge.dto.ReportingStructureDto;
+import com.mindex.challenge.dto.ReportingStructure;
 
 public interface ReportingStructureService {
-    ReportingStructureDto read(String employeeId);
+    ReportingStructure read(String employeeId);
 }
