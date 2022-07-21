@@ -1,7 +1,7 @@
 package com.mindex.challenge.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EmployeeDto {
     public String employeeId;
@@ -9,7 +9,7 @@ public class EmployeeDto {
     public String lastName;
     public String position;
     public String department;
-    public List<String> directReports = new ArrayList<>();
+    public Set<String> directReports = new HashSet<>();
 
     public EmployeeDto() {
     }
@@ -22,7 +22,7 @@ public class EmployeeDto {
         this.department = department;
     }
 
-    public EmployeeDto(String employeeId, String firstName, String lastName, String position, String department, List<String> directReports) {
+    public EmployeeDto(String employeeId, String firstName, String lastName, String position, String department, HashSet<String> directReports) {
         this(employeeId, firstName, lastName, position, department);
         this.directReports = directReports;
     }
