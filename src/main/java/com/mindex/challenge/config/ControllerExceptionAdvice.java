@@ -1,6 +1,7 @@
 package com.mindex.challenge.config;
 
 import com.mindex.challenge.controller.StandardError;
+import com.mindex.challenge.exceptions.DirectReportEmployeeNotFoundException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,13 @@ public class ControllerExceptionAdvice {
     public ResponseEntity<StandardError> handleEmployeeNotFound(HttpServletRequest request) {
         String errorMsg = "Employee not found";
         HttpStatus status = HttpStatus.NOT_FOUND;
+        return getResponseError(errorMsg, status, request);
+    }
+
+    @ExceptionHandler(DirectReportEmployeeNotFoundException.class)
+    public ResponseEntity<StandardError> handleDirectReportEmployeeNotFound(DirectReportEmployeeNotFoundException ex, HttpServletRequest request) {
+        String errorMsg = ex.getMessage();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         return getResponseError(errorMsg, status, request);
     }
 
