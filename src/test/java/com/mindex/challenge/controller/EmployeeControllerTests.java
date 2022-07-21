@@ -52,10 +52,10 @@ public class EmployeeControllerTests {
     }
 
     @Test
-    @DisplayName("Read employee endpoint with valid id returns employee and 200")
+    @DisplayName("GET /employee/1 - Ok")
     public void read_givenAValidId_ShouldReturnEmployeeAnd200() throws Exception {
 
-        final String employeeId = "123";
+        final String employeeId = "1";
         Employee exampleEmployee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
 
         when(employeeService.read(employeeId)).thenReturn(exampleEmployee);
@@ -67,7 +67,7 @@ public class EmployeeControllerTests {
     }
 
     @Test
-    @DisplayName("Read employee endpoint with invalid id returns error and 404")
+    @DisplayName("GET /employee/1 - Not Found")
     public void read_givenANotExistentId_ShouldReturn404() throws Exception {
         when(employeeService.read(anyString())).thenThrow(EmployeeNotFoundException.class);
 
@@ -78,10 +78,10 @@ public class EmployeeControllerTests {
     }
 
     @Test
-    @DisplayName("Create employee endpoint with valid employee format returns employee and 201")
-    public void create_givenAValidInput_ShouldReturnEmployeeAnd200() throws Exception {
+    @DisplayName("POST /employee - Created")
+    public void create_givenAValidInput_ShouldReturnEmployeeAnd201() throws Exception {
 
-        final String employeeId = "123";
+        final String employeeId = "1";
         Employee exampleEmployee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
 
         when(employeeService.create(any())).thenReturn(exampleEmployee);
