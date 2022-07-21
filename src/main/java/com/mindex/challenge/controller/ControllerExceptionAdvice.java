@@ -1,7 +1,8 @@
 package com.mindex.challenge.controller;
 
-import com.mindex.challenge.controller.StandardError;
+import com.mindex.challenge.exceptions.CompensationNotFoundException;
 import com.mindex.challenge.exceptions.DirectReportEmployeeNotFoundException;
+import com.mindex.challenge.exceptions.DuplicateCompensationException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,20 @@ public class ControllerExceptionAdvice {
     public ResponseEntity<StandardError> handleDirectReportEmployeeNotFound(DirectReportEmployeeNotFoundException ex, HttpServletRequest request) {
         String errorMsg = ex.getMessage();
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        return getResponseError(errorMsg, status, request);
+    }
+
+    @ExceptionHandler(DuplicateCompensationException.class)
+    public ResponseEntity<StandardError> handleDuplicateCompensationException(DuplicateCompensationException ex, HttpServletRequest request) {
+        String errorMsg = ex.getMessage();
+        HttpStatus status = HttpStatus.CONFLICT;
+        return getResponseError(errorMsg, status, request);
+    }
+
+    @ExceptionHandler(CompensationNotFoundException.class)
+    public ResponseEntity<StandardError> handleCompensationNotFound(CompensationNotFoundException ex, HttpServletRequest request) {
+        String errorMsg = ex.getMessage();
+        HttpStatus status = HttpStatus.NOT_FOUND;
         return getResponseError(errorMsg, status, request);
     }
 
