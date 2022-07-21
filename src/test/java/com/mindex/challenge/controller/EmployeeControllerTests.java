@@ -5,6 +5,7 @@ import com.mindex.challenge.dto.EmployeeDto;
 import com.mindex.challenge.exceptions.DirectReportEmployeeNotFoundException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.EmployeeService;
+import com.mindex.challenge.util.JsonMapper;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -36,14 +37,6 @@ public class EmployeeControllerTests {
     EmployeeService employeeService;
 
     final String BASE_ROUTE = "/employee";
-
-    static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Test
     @DisplayName("Smoke test for Spring DI")
@@ -87,7 +80,7 @@ public class EmployeeControllerTests {
 
         mockMvc.perform(post(BASE_ROUTE)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(exampleEmployee)))
+                .content(JsonMapper.asJsonString(exampleEmployee)))
 
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, BASE_ROUTE + "/" + employeeId))
@@ -110,7 +103,7 @@ public class EmployeeControllerTests {
 
         mockMvc.perform(put(BASE_ROUTE + "/" + employeeId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(exampleEmployee)))
+                        .content(JsonMapper.asJsonString(exampleEmployee)))
 
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.LOCATION, BASE_ROUTE + "/" + employeeId))
@@ -133,7 +126,7 @@ public class EmployeeControllerTests {
 
         mockMvc.perform(put(BASE_ROUTE + "/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(exampleEmployee)))
+                .content(JsonMapper.asJsonString(exampleEmployee)))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
@@ -150,7 +143,7 @@ public class EmployeeControllerTests {
 
         mockMvc.perform(put(BASE_ROUTE + "/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(exampleEmployee)))
+                        .content(JsonMapper.asJsonString(exampleEmployee)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
