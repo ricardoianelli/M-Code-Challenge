@@ -131,8 +131,9 @@ Here's a simple overview diagram of the application (showing only the most impor
 - [x] Create ReportingStructure DTO
 - [x] Create ReportingStructure DTO service tests
 - [x] Create ReportingStructure DTO service
-- [ ] Create ReportingStructure DTO controller tests
-- [ ] Create ReportingStructure DTO controller
+- [x] Create ReportingStructure DTO controller tests
+- [x] Create ReportingStructure DTO controller
+- [x] Add unit tests for existing JsonMapper
 - [ ] Add advice to log duration of requests
 - [ ] Dockerize application
 - [ ] Add Swagger API documentation
