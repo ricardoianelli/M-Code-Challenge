@@ -76,8 +76,8 @@ public class EmployeeServiceImplTests {
     }
 
     @Test
-    @DisplayName("Update existing employee returns updated employee")
-    public void update_givenAExistingEmployee_ShouldFetchOldAndUpdateIt() {
+    @DisplayName("Update or create employee returns updated employee")
+    public void update_givenAnEmployee_ShouldUpdateOrInsertNewOne() {
 
         final String employeeId = "1";
         Employee oldVersion = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
@@ -89,26 +89,6 @@ public class EmployeeServiceImplTests {
         Employee returnedEmployee = employeeService.update(updated);
         assertThat(returnedEmployee.equals(updated)).isTrue();
 
-        verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
         verify(employeeRepository, times(1)).save(updated);
-        verify(employeeRepository, times(0)).insert(any(Employee.class));
-    }
-
-    @Test
-    @DisplayName("Update for a non-existing employee insert a new one and returns it")
-    public void update_givenANonExistingEmployee_ShouldInsertNewOneAndReturnIt() {
-
-        final String employeeId = "1";
-        Employee updated = new Employee(employeeId, "Ricardo", "Ianelli", "Tech Lead", "IT");
-
-        when(employeeRepository.findByEmployeeId(anyString())).thenReturn(null);
-        when(employeeRepository.insert(updated)).thenReturn(updated);
-
-        Employee returnedEmployee = employeeService.update(updated);
-        assertThat(returnedEmployee.equals(updated)).isTrue();
-
-        verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
-        verify(employeeRepository, times(0)).save(updated);
-        verify(employeeRepository, times(1)).insert(updated);
     }
 }
