@@ -134,6 +134,15 @@ Here's a simple overview diagram of the application (showing only the most impor
 - [x] Create ReportingStructure DTO controller tests
 - [x] Create ReportingStructure DTO controller
 - [x] Add unit tests for existing JsonMapper
+- [ ] Create Compensation entity
+- [ ] Create Compensation repository
+- [ ] Create Compensation DTO
+- [ ] Create CompensationAdapter tests
+- [ ] Create CompensationAdapter implementation
+- [ ] Create Compensation service tests
+- [ ] Create Compensation service implementation
+- [ ] Create Compensation controller tests
+- [ ] Create Compensation controller
 - [ ] Add advice to log duration of requests
 - [ ] Dockerize application
 - [ ] Add Swagger API documentation
