@@ -126,7 +126,13 @@ Here's a simple overview diagram of the application (showing only the most impor
 - [x] Use DTOs to avoid coupling
 - [x] Create Adapter tests and implementation
 - [x] Add Postman Collection
-- [ ] Add application design overview
+- [x] Add application design overview
+- [x] Create ReportingStructure DTO
+- [x] Create ReportingStructure DTO service tests
+- [x] Create ReportingStructure DTO service
+- [ ] Create ReportingStructure DTO controller tests
+- [ ] Create ReportingStructure DTO controller
+- [ ] Add advice to log duration of requests
 - [ ] Dockerize application
 - [ ] Add Swagger API documentation
 - [ ] Include CI with GitHub actions
