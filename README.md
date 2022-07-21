@@ -1,5 +1,5 @@
 <h1 align="center">
-    Code Challenge - Company M.
+   💻 Code Challenge - Company M. 💻
 </h1>
 <h3 align="center">
     Candidate: Ricardo Ianelli
