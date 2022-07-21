@@ -106,6 +106,9 @@ Compensation from the persistence layer.
 - [x] Create unit tests for EmployeeController methods
 - [x] Create unit tests for EmployeeServiceImpl
 - [x] Refactor controller to respect REST best practices
+- [x] Create EmployeeDto to avoid coupling
+- [ ] Create Adapter tests and implementation
+- [ ] Add Postman Collection
 - [ ] Add application design overview
 - [ ] Dockerize application
 - [ ] Add Swagger API documentation
