@@ -134,11 +134,11 @@ Here's a simple overview diagram of the application (showing only the most impor
 - [x] Create ReportingStructure DTO controller tests
 - [x] Create ReportingStructure DTO controller
 - [x] Add unit tests for existing JsonMapper
-- [ ] Create Compensation entity
-- [ ] Create Compensation repository
-- [ ] Create Compensation DTO
-- [ ] Create CompensationAdapter tests
-- [ ] Create CompensationAdapter implementation
+- [x] Create Compensation entity
+- [x] Create Compensation repository
+- [x] Create Compensation DTO
+- [x] Create CompensationAdapter tests
+- [x] Create CompensationAdapter implementation
 - [ ] Create Compensation service tests
 - [ ] Create Compensation service implementation
 - [ ] Create Compensation controller tests
