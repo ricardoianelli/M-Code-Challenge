@@ -1,4 +1,4 @@
-package com.mindex.challenge.config;
+package com.mindex.challenge.controller;
 
 import com.mindex.challenge.controller.StandardError;
 import com.mindex.challenge.exceptions.DirectReportEmployeeNotFoundException;
