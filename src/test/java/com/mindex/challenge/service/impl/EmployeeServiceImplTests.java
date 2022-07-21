@@ -68,7 +68,7 @@ public class EmployeeServiceImplTests {
     public void read_givenAnInvalidId_ShouldThrowEmployeeNotFoundException() {
         final String employeeId = "1";
 
-        when(employeeRepository.findByEmployeeId(anyString())).thenThrow(new EntityNotFoundException());
+        when(employeeRepository.findByEmployeeId(anyString())).thenReturn(null);
 
         assertThrows(EmployeeNotFoundException.class, () -> employeeService.read(employeeId));
 
@@ -101,7 +101,7 @@ public class EmployeeServiceImplTests {
         final String employeeId = "1";
         Employee updated = new Employee(employeeId, "Ricardo", "Ianelli", "Tech Lead", "IT");
 
-        when(employeeRepository.findByEmployeeId(employeeId)).thenThrow(new EntityNotFoundException());
+        when(employeeRepository.findByEmployeeId(anyString())).thenReturn(null);
         when(employeeRepository.insert(updated)).thenReturn(updated);
 
         Employee returnedEmployee = employeeService.update(updated);
