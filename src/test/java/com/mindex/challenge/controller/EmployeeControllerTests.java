@@ -20,8 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -98,5 +97,41 @@ public class EmployeeControllerTests {
                 .andExpect(jsonPath("$.lastName").value(exampleEmployee.getLastName()))
                 .andExpect(jsonPath("$.position").value(exampleEmployee.getPosition()))
                 .andExpect(jsonPath("$.department").value(exampleEmployee.getDepartment()));
+    }
+
+    @Test
+    @DisplayName("PUT /employee/1 - Ok")
+    public void update_givenAValidInput_ShouldReturnEmployeeAnd200() throws Exception {
+
+        final String employeeId = "1";
+        Employee exampleEmployee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+
+        when(employeeService.update(any())).thenReturn(exampleEmployee);
+
+        mockMvc.perform(put(BASE_ROUTE + "/" + employeeId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(exampleEmployee)))
+
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.LOCATION, BASE_ROUTE + "/" + employeeId))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.employeeId").value(employeeId))
+                .andExpect(jsonPath("$.firstName").value(exampleEmployee.getFirstName()))
+                .andExpect(jsonPath("$.lastName").value(exampleEmployee.getLastName()))
+                .andExpect(jsonPath("$.position").value(exampleEmployee.getPosition()))
+                .andExpect(jsonPath("$.department").value(exampleEmployee.getDepartment()));
+    }
+
+    @Test
+    @DisplayName("PUT /employee/1 - Not Found")
+    public void update_givenANotExistentEmployee_ShouldReturnErrorAnd404() throws Exception {
+        when(employeeService.update(any())).thenThrow(EmployeeNotFoundException.class);
+
+        mockMvc.perform(put(BASE_ROUTE + "/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(new Employee())))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Employee not found"));
     }
 }
