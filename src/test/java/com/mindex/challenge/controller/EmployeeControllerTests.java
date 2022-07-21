@@ -2,6 +2,7 @@ package com.mindex.challenge.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mindex.challenge.data.Employee;
+import com.mindex.challenge.dto.EmployeeDto;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.EmployeeService;
 import org.junit.Test;
@@ -55,7 +56,7 @@ public class EmployeeControllerTests {
     public void read_givenAValidId_ShouldReturnEmployeeAnd200() throws Exception {
 
         final String employeeId = "1";
-        Employee exampleEmployee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        EmployeeDto exampleEmployee = new EmployeeDto(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
 
         when(employeeService.read(employeeId)).thenReturn(exampleEmployee);
 
@@ -81,7 +82,7 @@ public class EmployeeControllerTests {
     public void create_givenAValidInput_ShouldReturnEmployeeAnd201() throws Exception {
 
         final String employeeId = "1";
-        Employee exampleEmployee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        EmployeeDto exampleEmployee = new EmployeeDto(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
 
         when(employeeService.create(any())).thenReturn(exampleEmployee);
 
@@ -93,10 +94,10 @@ public class EmployeeControllerTests {
                 .andExpect(header().string(HttpHeaders.LOCATION, BASE_ROUTE + "/" + employeeId))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.employeeId").value(employeeId))
-                .andExpect(jsonPath("$.firstName").value(exampleEmployee.getFirstName()))
-                .andExpect(jsonPath("$.lastName").value(exampleEmployee.getLastName()))
-                .andExpect(jsonPath("$.position").value(exampleEmployee.getPosition()))
-                .andExpect(jsonPath("$.department").value(exampleEmployee.getDepartment()));
+                .andExpect(jsonPath("$.firstName").value(exampleEmployee.firstName))
+                .andExpect(jsonPath("$.lastName").value(exampleEmployee.lastName))
+                .andExpect(jsonPath("$.position").value(exampleEmployee.position))
+                .andExpect(jsonPath("$.department").value(exampleEmployee.department));
     }
 
     @Test
@@ -104,7 +105,7 @@ public class EmployeeControllerTests {
     public void update_givenAValidInput_ShouldReturnEmployeeAnd200() throws Exception {
 
         final String employeeId = "1";
-        Employee exampleEmployee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        EmployeeDto exampleEmployee = new EmployeeDto(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
 
         when(employeeService.update(any())).thenReturn(exampleEmployee);
 
@@ -116,11 +117,13 @@ public class EmployeeControllerTests {
                 .andExpect(header().string(HttpHeaders.LOCATION, BASE_ROUTE + "/" + employeeId))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.employeeId").value(employeeId))
-                .andExpect(jsonPath("$.firstName").value(exampleEmployee.getFirstName()))
-                .andExpect(jsonPath("$.lastName").value(exampleEmployee.getLastName()))
-                .andExpect(jsonPath("$.position").value(exampleEmployee.getPosition()))
-                .andExpect(jsonPath("$.department").value(exampleEmployee.getDepartment()));
+                .andExpect(jsonPath("$.firstName").value(exampleEmployee.firstName))
+                .andExpect(jsonPath("$.lastName").value(exampleEmployee.lastName))
+                .andExpect(jsonPath("$.position").value(exampleEmployee.position))
+                .andExpect(jsonPath("$.department").value(exampleEmployee.department));
     }
+
+    //TODO: Add test case for not existent direct report
 
     @Test
     @DisplayName("PUT /employee/1 - Not Found")

@@ -1,6 +1,6 @@
 package com.mindex.challenge.service.impl;
 
-import com.mindex.challenge.data.Employee;
+import com.mindex.challenge.dto.EmployeeDto;
 import com.mindex.challenge.service.EmployeeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,48 +44,45 @@ public class EmployeeServiceImplIntegrationTest {
     @Test
     @DisplayName("Integration test for Employee endpoints")
     public void testCreateReadUpdate() {
-        Employee testEmployee = new Employee();
-        testEmployee.setFirstName("John");
-        testEmployee.setLastName("Doe");
-        testEmployee.setDepartment("Engineering");
-        testEmployee.setPosition("Developer");
+
+        EmployeeDto testEmployee = new EmployeeDto(null, "John", "Doe", "Engineering", "Developer");
 
         // Create checks
-        Employee createdEmployee = restTemplate.postForEntity(employeeUrl, testEmployee, Employee.class).getBody();
+        HttpEntity<EmployeeDto> request = new HttpEntity<>(testEmployee);
+        EmployeeDto createdEmployee = restTemplate.postForObject(employeeUrl, request, EmployeeDto.class);
 
         assertNotNull(createdEmployee);
-        assertNotNull(createdEmployee.getEmployeeId());
+        assertNotNull(createdEmployee.employeeId);
         assertEmployeeEquivalence(testEmployee, createdEmployee);
 
-
         // Read checks
-        Employee readEmployee = restTemplate.getForEntity(employeeIdUrl, Employee.class, createdEmployee.getEmployeeId()).getBody();
+        EmployeeDto readEmployee = restTemplate.getForObject(employeeIdUrl, EmployeeDto.class, createdEmployee.employeeId);
         assertNotNull(readEmployee);
-        assertEquals(createdEmployee.getEmployeeId(), readEmployee.getEmployeeId());
+        assertEquals(createdEmployee.employeeId, readEmployee.employeeId);
         assertEmployeeEquivalence(createdEmployee, readEmployee);
 
 
         // Update checks
-        readEmployee.setPosition("Development Manager");
+        readEmployee.position = "Development Manager";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Employee updatedEmployee =
+        EmployeeDto updatedEmployee =
                 restTemplate.exchange(employeeIdUrl,
                         HttpMethod.PUT,
                         new HttpEntity<>(readEmployee, headers),
-                        Employee.class,
-                        readEmployee.getEmployeeId()).getBody();
+                        EmployeeDto.class,
+                        readEmployee.employeeId).getBody();
 
         assertNotNull(updatedEmployee);
         assertEmployeeEquivalence(readEmployee, updatedEmployee);
     }
 
-    private static void assertEmployeeEquivalence(Employee expected, Employee actual) {
-        assertEquals(expected.getFirstName(), actual.getFirstName());
-        assertEquals(expected.getLastName(), actual.getLastName());
-        assertEquals(expected.getDepartment(), actual.getDepartment());
-        assertEquals(expected.getPosition(), actual.getPosition());
+    private static void assertEmployeeEquivalence(EmployeeDto expected, EmployeeDto actual) {
+        assertEquals(expected.firstName, actual.firstName);
+        assertEquals(expected.lastName, actual.lastName);
+        assertEquals(expected.position, actual.position);
+        assertEquals(expected.department, actual.department);
     }
 }

@@ -1,7 +1,9 @@
 package com.mindex.challenge.service.impl;
 
+import com.mindex.challenge.adapter.EmployeeAdapter;
 import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Employee;
+import com.mindex.challenge.dto.EmployeeDto;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.EmployeeService;
 import org.junit.Test;
@@ -24,6 +26,9 @@ public class EmployeeServiceImplTests {
     @Autowired
     EmployeeService employeeService;
 
+    @Autowired
+    EmployeeAdapter employeeAdapter;
+
     @MockBean
     EmployeeRepository employeeRepository;
 
@@ -35,30 +40,32 @@ public class EmployeeServiceImplTests {
 
     @Test
     @DisplayName("Create employee returns a new employee")
-    public void create_givenAValidEmployee_ShouldPersistAndReturnEmployee() {
+    public void create_givenAValidEmployeeDto_ShouldPersistAndReturnEmployeeDto() {
 
         final String employeeId = "1";
         Employee employee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        EmployeeDto dto = employeeAdapter.entityToDto(employee);
 
         when(employeeRepository.insert(employee)).thenReturn(employee);
 
-        Employee persisted = employeeService.create(employee);
-        assertThat(persisted.equals(employee)).isTrue();
+        EmployeeDto persisted = employeeService.create(dto);
+        assertThat(persisted.equals(dto)).isTrue();
 
         verify(employeeRepository, times(1)).insert(employee);
     }
 
     @Test
     @DisplayName("Read employee with a valid id returns an employee from DB")
-    public void read_givenAValidId_ShouldReturnEmployee() {
+    public void read_givenAValidId_ShouldReturnEmployeeDto() {
 
         final String employeeId = "1";
         Employee employee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        EmployeeDto dto = employeeAdapter.entityToDto(employee);
 
         when(employeeRepository.findByEmployeeId(anyString())).thenReturn(employee);
 
-        Employee fetched = employeeService.read(employeeId);
-        assertThat(fetched.equals(employee)).isTrue();
+        EmployeeDto fetched = employeeService.read(employeeId);
+        assertThat(fetched.equals(dto)).isTrue();
 
         verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
     }
@@ -77,18 +84,21 @@ public class EmployeeServiceImplTests {
 
     @Test
     @DisplayName("Update or create employee returns updated employee")
-    public void update_givenAnEmployee_ShouldUpdateOrInsertNewOne() {
+    public void update_givenAnEmployeeDto_ShouldUpdateOrInsertNewOne() {
 
         final String employeeId = "1";
         Employee oldVersion = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
         Employee updated = new Employee(employeeId, "Ricardo", "Ianelli", "Tech Lead", "IT");
+        EmployeeDto dto = employeeAdapter.entityToDto(updated);
 
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(oldVersion);
         when(employeeRepository.save(updated)).thenReturn(updated);
 
-        Employee returnedEmployee = employeeService.update(updated);
-        assertThat(returnedEmployee.equals(updated)).isTrue();
+        EmployeeDto returnedEmployee = employeeService.update(dto);
+        assertThat(returnedEmployee.equals(dto)).isTrue();
 
         verify(employeeRepository, times(1)).save(updated);
     }
+
+    //TODO: Add test case for not existent direct report
 }
