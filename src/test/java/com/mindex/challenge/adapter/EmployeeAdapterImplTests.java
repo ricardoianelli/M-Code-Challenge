@@ -4,6 +4,7 @@ import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.EmployeeDto;
 import com.mindex.challenge.exceptions.DirectReportEmployeeNotFoundException;
+import com.mindex.challenge.utils.EmployeeComparer;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -60,7 +61,7 @@ public class EmployeeAdapterImplTests {
 
         Employee resultEntity = employeeAdapter.dtoToEntity(dto);
 
-        compareEntityAndDto(resultEntity, dto);
+        EmployeeComparer.compareEntityAndDto(resultEntity, dto);
     }
 
     @Test(expected = DirectReportEmployeeNotFoundException.class)
@@ -79,32 +80,6 @@ public class EmployeeAdapterImplTests {
     @DisplayName("Convert Employee to DTO")
     public void entityToDto_givenAValidEntity_ReturnsMatchingDto() {
         EmployeeDto resultDto = employeeAdapter.entityToDto(entity);
-        compareEntityAndDto(entity, resultDto);
+        EmployeeComparer.compareEntityAndDto(entity, resultDto);
     }
-
-    private void compareEntityAndDto(Employee employee, EmployeeDto dto) {
-        assertAll("Should match employee entity and DTO",
-                () -> assertEquals("Id match", employee.getEmployeeId(), dto.employeeId),
-                () -> assertEquals("First name match",employee.getFirstName(), dto.firstName),
-                () -> assertEquals("Last name match",employee.getLastName(), dto.lastName),
-                () -> assertEquals("Position match",employee.getPosition(), dto.position),
-                () -> assertEquals("Department match",employee.getDepartment(), dto.department),
-                () -> assertTrue("Direct reports match",compareDirectReportsFromEntityAndDto(employee, dto))
-        );
-    }
-
-    private boolean compareDirectReportsFromEntityAndDto(Employee employee, EmployeeDto dto) {
-        if (employee.getDirectReports().size() != dto.directReports.size()) {
-            return false;
-        }
-
-        for (Employee directReport : employee.getDirectReports()) {
-            if (!dto.directReports.contains(directReport.getEmployeeId())) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
 }
