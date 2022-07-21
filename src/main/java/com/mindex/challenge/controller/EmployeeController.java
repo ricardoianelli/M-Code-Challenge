@@ -34,17 +34,25 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public Employee read(@PathVariable String id) {
+    public ResponseEntity<?> read(@PathVariable String id) {
         LOG.debug("Received employee read request for id [{}]", id);
 
-        return employeeService.read(id);
+        return ResponseEntity.ok(employeeService.read(id));
     }
 
     @PutMapping("/{id}")
-    public Employee update(@PathVariable String id, @RequestBody Employee employee) {
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody Employee employee) {
         LOG.debug("Received employee update request for id [{}] and employee [{}]", id, employee);
 
-        employee.setEmployeeId(id);
-        return employeeService.update(employee);
+        try {
+            employee.setEmployeeId(id);
+            Employee updatedEmployee = employeeService.update(employee);
+            return ResponseEntity
+                    .ok()
+                    .location(new URI("/employee/" + updatedEmployee.getEmployeeId()))
+                    .body(updatedEmployee);
+        } catch (URISyntaxException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
