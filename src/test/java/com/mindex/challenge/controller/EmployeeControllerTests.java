@@ -1,8 +1,8 @@
 package com.mindex.challenge.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.EmployeeDto;
+import com.mindex.challenge.exceptions.DirectReportEmployeeNotFoundException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.EmployeeService;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,7 +52,7 @@ public class EmployeeControllerTests {
     }
 
     @Test
-    @DisplayName("GET /employee/1 - Ok")
+    @DisplayName("GET /employee/1 with a valid id should return employee and Ok")
     public void read_givenAValidId_ShouldReturnEmployeeAnd200() throws Exception {
 
         final String employeeId = "1";
@@ -67,18 +67,17 @@ public class EmployeeControllerTests {
     }
 
     @Test
-    @DisplayName("GET /employee/1 - Not Found")
+    @DisplayName("GET /employee/1 with a not existent employee should return Not Found")
     public void read_givenANotExistentId_ShouldReturn404() throws Exception {
         when(employeeService.read(anyString())).thenThrow(EmployeeNotFoundException.class);
 
         mockMvc.perform(get(BASE_ROUTE + "/1"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Employee not found"));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    @DisplayName("POST /employee - Created")
+    @DisplayName("POST /employee with valid employee should return Created")
     public void create_givenAValidInput_ShouldReturnEmployeeAnd201() throws Exception {
 
         final String employeeId = "1";
@@ -101,13 +100,13 @@ public class EmployeeControllerTests {
     }
 
     @Test
-    @DisplayName("PUT /employee/1 - Ok")
+    @DisplayName("PUT /employee/1 with valid employee should return employee and Ok")
     public void update_givenAValidInput_ShouldReturnEmployeeAnd200() throws Exception {
 
         final String employeeId = "1";
         EmployeeDto exampleEmployee = new EmployeeDto(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
 
-        when(employeeService.update(any())).thenReturn(exampleEmployee);
+        when(employeeService.update(any(EmployeeDto.class))).thenReturn(exampleEmployee);
 
         mockMvc.perform(put(BASE_ROUTE + "/" + employeeId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -121,20 +120,40 @@ public class EmployeeControllerTests {
                 .andExpect(jsonPath("$.lastName").value(exampleEmployee.lastName))
                 .andExpect(jsonPath("$.position").value(exampleEmployee.position))
                 .andExpect(jsonPath("$.department").value(exampleEmployee.department));
+
+        verify(employeeService, times(1)).update(any(EmployeeDto.class));
     }
 
-    //TODO: Add test case for not existent direct report
+    @Test
+    @DisplayName("PUT /employee/{id} with invalid employee should return Not Found")
+    public void update_givenANotExistentEmployee_ShouldReturnErrorAnd404() throws Exception {
+        final String id = "1";
+        EmployeeDto exampleEmployee = new EmployeeDto(id, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        when(employeeService.update(any(EmployeeDto.class))).thenThrow(EmployeeNotFoundException.class);
+
+        mockMvc.perform(put(BASE_ROUTE + "/" + id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(exampleEmployee)))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(employeeService, times(1)).update(any(EmployeeDto.class));
+    }
 
     @Test
-    @DisplayName("PUT /employee/1 - Not Found")
-    public void update_givenANotExistentEmployee_ShouldReturnErrorAnd404() throws Exception {
-        when(employeeService.update(any())).thenThrow(EmployeeNotFoundException.class);
+    @DisplayName("PUT /employee/1 with invalid direct reports should return Bad Request")
+    public void update_givenInvalidDirectReports_ShouldReturnErrorAnd400() throws Exception {
+        final String id = "1";
+        EmployeeDto exampleEmployee = new EmployeeDto(id, "Ricardo", "Ianelli", "Software Engineer", "IT");
 
-        mockMvc.perform(put(BASE_ROUTE + "/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(new Employee())))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Employee not found"));
+        when(employeeService.update(any())).thenThrow(DirectReportEmployeeNotFoundException.class);
+
+        mockMvc.perform(put(BASE_ROUTE + "/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(exampleEmployee)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(employeeService, times(1)).update(any(EmployeeDto.class));
     }
 }
