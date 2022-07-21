@@ -105,7 +105,7 @@ Compensation from the persistence layer.
 ## 🚧 Tasks Backlog 🚧
 - [x] Create unit tests for EmployeeController methods
 - [x] Create unit tests for EmployeeServiceImpl
-- [ ] Refactor controller to respect REST best practices
+- [x] Refactor controller to respect REST best practices
 - [ ] Add application design overview
 - [ ] Dockerize application
 - [ ] Add Swagger API documentation
