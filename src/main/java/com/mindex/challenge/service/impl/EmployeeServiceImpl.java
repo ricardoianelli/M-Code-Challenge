@@ -1,13 +1,16 @@
 package com.mindex.challenge.service.impl;
 
+import com.mindex.challenge.adapter.EmployeeAdapter;
 import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Employee;
+import com.mindex.challenge.dto.EmployeeDto;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.UUID;
 
 @Service
@@ -18,19 +21,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @Override
-    public Employee create(Employee employee) {
-        LOG.debug("Creating employee id [{}]", employee.getEmployeeId());
+    @Autowired
+    private EmployeeAdapter employeeAdapter;
 
-        employee.setEmployeeId(UUID.randomUUID().toString());
+    @Override
+    public EmployeeDto create(EmployeeDto employeeDto) {
+        LOG.debug("Creating new employee");
+
+        employeeDto.employeeId = UUID.randomUUID().toString();
+        Employee employee = employeeAdapter.dtoToEntity(employeeDto);
         employeeRepository.insert(employee);
 
-        LOG.debug("Employee with id [{}] was created successfully", employee);
-        return employee;
+        LOG.debug("Employee with id [{}] was created successfully", employeeDto.employeeId);
+        return employeeDto;
     }
 
     @Override
-    public Employee read(String id) {
+    public EmployeeDto read(String id) {
 
         LOG.debug("Reading employee with id [{}]", id);
         Employee employee = employeeRepository.findByEmployeeId(id);
@@ -38,22 +45,26 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new EmployeeNotFoundException("Could not find employee with id " + id);
         }
 
+        EmployeeDto dto = employeeAdapter.entityToDto(employee);
+
         LOG.debug("Returning employee with id [{}]", employee);
-        return employee;
+        return dto;
     }
 
     @Override
-    public Employee update(Employee employee) {
-        LOG.debug("Updating employee id [{}]", employee.getEmployeeId());
+    public EmployeeDto update(EmployeeDto dto) {
+        LOG.debug("Updating employee id [{}]", dto.employeeId);
 
-        Employee existingEmployee = employeeRepository.findByEmployeeId(employee.getEmployeeId());
+        Employee employee = employeeRepository.findByEmployeeId(dto.employeeId);
 
-        if (existingEmployee == null) {
-            LOG.debug("Employee not found during update. Inserting a new one with id [{}]", employee.getEmployeeId());
+        if (employee == null) {
+            LOG.debug("Employee not found during update. Inserting a new one with id [{}]", dto.employeeId);
         }
 
+        employee = employeeAdapter.dtoToEntity(dto);
+
         employeeRepository.save(employee);
-        LOG.debug("Employee with id [{}] updated or inserted successfully", employee.getEmployeeId());
-        return employee;
+        LOG.debug("Employee with id [{}] updated or inserted successfully", dto.employeeId);
+        return dto;
     }
 }
