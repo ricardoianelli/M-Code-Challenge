@@ -47,7 +47,7 @@ public class CompensationServiceImplTests {
     }
 
     @Test
-    @DisplayName("Create employee returns a new employee")
+    @DisplayName("Create compensation returns a new compensation")
     public void create_givenAValidEmployeeId_ShouldPersistAndReturnCompensationDto() {
 
         final String employeeId = "1";
