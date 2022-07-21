@@ -3,6 +3,7 @@ package com.mindex.challenge;
 import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Employee;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ public class DataBootstrapTest {
     private EmployeeRepository employeeRepository;
 
     @Test
+    @DisplayName("Check if bootstrapped data is available")
     public void test() {
         Employee employee = employeeRepository.findByEmployeeId("16a596ae-edd3-4847-99fe-c4518e82c86f");
         assertNotNull(employee);

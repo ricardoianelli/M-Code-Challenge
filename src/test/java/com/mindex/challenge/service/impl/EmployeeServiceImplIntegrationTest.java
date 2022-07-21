@@ -4,6 +4,7 @@ import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.service.EmployeeService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +42,7 @@ public class EmployeeServiceImplIntegrationTest {
     }
 
     @Test
+    @DisplayName("Integration test for Employee endpoints")
     public void testCreateReadUpdate() {
         Employee testEmployee = new Employee();
         testEmployee.setFirstName("John");
@@ -51,12 +53,14 @@ public class EmployeeServiceImplIntegrationTest {
         // Create checks
         Employee createdEmployee = restTemplate.postForEntity(employeeUrl, testEmployee, Employee.class).getBody();
 
+        assertNotNull(createdEmployee);
         assertNotNull(createdEmployee.getEmployeeId());
         assertEmployeeEquivalence(testEmployee, createdEmployee);
 
 
         // Read checks
         Employee readEmployee = restTemplate.getForEntity(employeeIdUrl, Employee.class, createdEmployee.getEmployeeId()).getBody();
+        assertNotNull(readEmployee);
         assertEquals(createdEmployee.getEmployeeId(), readEmployee.getEmployeeId());
         assertEmployeeEquivalence(createdEmployee, readEmployee);
 
@@ -70,10 +74,11 @@ public class EmployeeServiceImplIntegrationTest {
         Employee updatedEmployee =
                 restTemplate.exchange(employeeIdUrl,
                         HttpMethod.PUT,
-                        new HttpEntity<Employee>(readEmployee, headers),
+                        new HttpEntity<>(readEmployee, headers),
                         Employee.class,
                         readEmployee.getEmployeeId()).getBody();
 
+        assertNotNull(updatedEmployee);
         assertEmployeeEquivalence(readEmployee, updatedEmployee);
     }
 
