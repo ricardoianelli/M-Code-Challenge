@@ -4,6 +4,7 @@ import com.mindex.challenge.adapter.EmployeeAdapter;
 import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.EmployeeDto;
+import com.mindex.challenge.exceptions.DirectReportEmployeeNotFoundException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.EmployeeService;
 import com.mindex.challenge.utils.EmployeeComparer;
@@ -55,6 +56,17 @@ public class EmployeeServiceImplTests {
         verify(employeeRepository, times(1)).insert(employee);
     }
 
+    @Test(expected = DirectReportEmployeeNotFoundException.class)
+    @DisplayName("Create employee with invalid direct reports throw exception")
+    public void create_givenInvalidDirectReports_ShouldThrowException() {
+
+        final String employeeId = "1";
+        EmployeeDto employeeDto = new EmployeeDto(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        employeeDto.directReports.add("1");
+
+        employeeService.create(employeeDto);
+    }
+
     @Test
     @DisplayName("Read employee with a valid id returns an employee from DB")
     public void read_givenAValidId_ShouldReturnEmployeeDto() {
@@ -100,5 +112,14 @@ public class EmployeeServiceImplTests {
         verify(employeeRepository, times(1)).save(updated);
     }
 
-    //TODO: Add test case for not existent direct report
+    @Test(expected = DirectReportEmployeeNotFoundException.class)
+    @DisplayName("Update employee with invalid direct reports throw exception")
+    public void update_givenInvalidDirectReports_ShouldThrowException() {
+
+        final String employeeId = "1";
+        EmployeeDto employeeDto = new EmployeeDto(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        employeeDto.directReports.add("1");
+
+        employeeService.update(employeeDto);
+    }
 }
