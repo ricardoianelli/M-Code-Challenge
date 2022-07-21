@@ -6,6 +6,7 @@ import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.EmployeeDto;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.EmployeeService;
+import com.mindex.challenge.utils.EmployeeComparer;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -49,8 +50,8 @@ public class EmployeeServiceImplTests {
         when(employeeRepository.insert(employee)).thenReturn(employee);
 
         EmployeeDto persisted = employeeService.create(dto);
-        assertThat(persisted.equals(dto)).isTrue();
-
+        EmployeeComparer.compareDtos(persisted, dto);
+        employee.setEmployeeId(dto.employeeId);
         verify(employeeRepository, times(1)).insert(employee);
     }
 
@@ -65,8 +66,7 @@ public class EmployeeServiceImplTests {
         when(employeeRepository.findByEmployeeId(anyString())).thenReturn(employee);
 
         EmployeeDto fetched = employeeService.read(employeeId);
-        assertThat(fetched.equals(dto)).isTrue();
-
+        EmployeeComparer.compareDtos(fetched, dto);
         verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
     }
 
@@ -95,7 +95,7 @@ public class EmployeeServiceImplTests {
         when(employeeRepository.save(updated)).thenReturn(updated);
 
         EmployeeDto returnedEmployee = employeeService.update(dto);
-        assertThat(returnedEmployee.equals(dto)).isTrue();
+        EmployeeComparer.compareDtos(returnedEmployee, dto);
 
         verify(employeeRepository, times(1)).save(updated);
     }
