@@ -1,15 +1,21 @@
 package com.mindex.challenge.data;
 
-import java.util.List;
-import java.util.Objects;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
+@Document
 public class Employee {
+    @Id
     private String employeeId;
     private String firstName;
     private String lastName;
     private String position;
     private String department;
-    private List<Employee> directReports;
+    private Set<Employee> directReports = new HashSet<>();
 
     public Employee() {
     }
@@ -62,11 +68,11 @@ public class Employee {
         this.department = department;
     }
 
-    public List<Employee> getDirectReports() {
+    public Set<Employee> getDirectReports() {
         return directReports;
     }
 
-    public void setDirectReports(List<Employee> directReports) {
+    public void setDirectReports(Set<Employee> directReports) {
         this.directReports = directReports;
     }
 
@@ -81,5 +87,13 @@ public class Employee {
     @Override
     public int hashCode() {
         return Objects.hash(employeeId);
+    }
+
+    public void addDirectReport(Employee employee) {
+        directReports.add(employee);
+    }
+
+    public void removeDirectReport(Employee employee) {
+        directReports.remove(employee);
     }
 }
