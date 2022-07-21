@@ -15,8 +15,8 @@ import java.time.Instant;
 public class ControllerExceptionAdvice {
 
     @ExceptionHandler(EmployeeNotFoundException.class)
-    public ResponseEntity<StandardError> handleEmployeeNotFound(HttpServletRequest request) {
-        String errorMsg = "Employee not found";
+    public ResponseEntity<StandardError> handleEmployeeNotFound(EmployeeNotFoundException ex, HttpServletRequest request) {
+        String errorMsg = ex.getMessage();
         HttpStatus status = HttpStatus.NOT_FOUND;
         return getResponseError(errorMsg, status, request);
     }
