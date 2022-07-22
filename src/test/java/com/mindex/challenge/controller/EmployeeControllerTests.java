@@ -94,6 +94,82 @@ public class EmployeeControllerTests {
     }
 
     @Test
+    @DisplayName("POST and PUT /employee with employee first name too short should return Bad Request")
+    public void createAndUpdate_givenEmployeeFirstNameTooShort_ShouldReturn400() throws Exception {
+
+        EmployeeDto exampleEmployee = new EmployeeDto(null, "R", "Ianelli", "Software Engineer", "IT");
+
+        mockMvc.perform(post(BASE_ROUTE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(exampleEmployee)))
+
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(put(BASE_ROUTE + "/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(exampleEmployee)))
+
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("POST and PUT /employee with employee last name too short should return Bad Request")
+    public void createAndUpdate_givenEmployeeLastNameTooShort_ShouldReturn400() throws Exception {
+
+        EmployeeDto exampleEmployee = new EmployeeDto(null, "Ricardo", "I", "Software Engineer", "IT");
+
+        mockMvc.perform(post(BASE_ROUTE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(exampleEmployee)))
+
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(put(BASE_ROUTE + "/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(exampleEmployee)))
+
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("POST and PUT /employee with employee position too short should return Bad Request")
+    public void createAndUpdate_givenEmployeePositionTooShort_ShouldReturn400() throws Exception {
+
+        EmployeeDto exampleEmployee = new EmployeeDto(null, "Ricardo", "Ianelli", "E", "IT");
+
+        mockMvc.perform(post(BASE_ROUTE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(exampleEmployee)))
+
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(put(BASE_ROUTE + "/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(exampleEmployee)))
+
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("POST and PUT /employee with employee department too short should return Bad Request")
+    public void createAndUpdate_givenEmployeeDepartmentTooShort_ShouldReturn400() throws Exception {
+
+        EmployeeDto exampleEmployee = new EmployeeDto(null, "Ricardo", "Ianelli", "Engineer", "I");
+
+        mockMvc.perform(post(BASE_ROUTE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(exampleEmployee)))
+
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(put(BASE_ROUTE + "/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(exampleEmployee)))
+
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     @DisplayName("PUT /employee/1 with valid employee should return employee and Ok")
     public void update_givenAValidInput_ShouldReturnEmployeeAnd200() throws Exception {
 
