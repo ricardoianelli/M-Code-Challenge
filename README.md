@@ -91,6 +91,7 @@ Here's a simple overview diagram of the application (showing only the most impor
 You can access the API documentation going to: http://localhost:8080/swagger-ui/index.html
 Note that you need to be running the service for that, of course.
 In there you can find a description of every endpoint offered and how to use it.
+![Documentation](images/documentation.png "API documentation")
 
 ## 🚧 Tasks Backlog 🚧
 #### Core:
