@@ -6,6 +6,7 @@ import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Compensation;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.CompensationDto;
+import com.mindex.challenge.exceptions.CompensationNotFoundException;
 import com.mindex.challenge.exceptions.DuplicateCompensationException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.CompensationService;
@@ -31,15 +32,15 @@ public class CompensationServiceImpl implements CompensationService {
     @Override
     public CompensationDto create(CompensationDto compensationDto) {
         checkForDuplication(compensationDto);
-        validateEmployee(compensationDto);
+        validateEmployee(compensationDto.employeeId);
 
         Compensation compensation = compensationAdapter.dtoToEntity(compensationDto);
         compensationRepository.insert(compensation);
         return compensationDto;
     }
 
-    private void validateEmployee(CompensationDto compensationDto) {
-        Employee existingEmployee = employeeRepository.findByEmployeeId(compensationDto.employeeId);
+    private void validateEmployee(String employeeId) {
+        Employee existingEmployee = employeeRepository.findByEmployeeId(employeeId);
         if (existingEmployee == null) {
             throw new EmployeeNotFoundException(employeeId);
         }
@@ -54,6 +55,13 @@ public class CompensationServiceImpl implements CompensationService {
 
     @Override
     public CompensationDto read(String employeeId) {
-        return null;
+        validateEmployee(employeeId);
+
+        Compensation preExisting = compensationRepository.findByEmployeeId(employeeId);
+        if (preExisting == null) {
+            throw new CompensationNotFoundException(employeeId);
+        }
+
+        return compensationAdapter.entityToDto(preExisting);
     }
 }
