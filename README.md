@@ -139,6 +139,7 @@ Here's a simple overview diagram of the application (showing only the most impor
 - [x] Create Compensation DTO
 - [x] Create CompensationAdapter tests
 - [x] Create CompensationAdapter implementation
+- [x] Create Compensations DTO
 - [x] Create Compensation service tests
 - [x] Create Compensation service implementation
 - [ ] Create Compensation controller tests
