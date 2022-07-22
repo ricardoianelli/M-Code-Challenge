@@ -123,7 +123,7 @@ In there you can find a description of every endpoint offered and how to use it.
 - [x] Add Swagger API documentation
 - [x] Add request logging with duration, status code and URI
 - [x] Add validations to DTOs
-- [ ] Paginate Compensation read endpoint
+- [x] Paginate Compensation read endpoint
 
 #### To the future:
 - [ ] Implement security using JWT
