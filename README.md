@@ -18,7 +18,15 @@
 - [Tasks Backlog](#-tasks-backlog-)
 
 ## 📚 About 📚
-This is the code challenge given during an interview process for a company M.
+A technical challenge involving employees management scenarios.
+You have options to:
+
+- Read and create employees
+- Generate reporting structure to see who reports to a certain employee
+- Read and create employee compensations
+
+Using RESTful API's made available with Java and Spring Boot.
+The database is a MongoDB running embedded, though the solution was created flexibly enought to change to another type of database without any big trouble.
 
 ### 🔥 The Challenge 🔥
 
@@ -26,53 +34,6 @@ A simple [Spring Boot](https://projects.spring.io/spring-boot/) web application 
 with data. The application contains information about all employees at a company. On application start-up, an in-memory 
 Mongo database is bootstrapped with a serialized snapshot of the database. While the application runs, the data may be
 accessed and mutated in the database without impacting the snapshot.
-
-### How to Use
-The following endpoints are available to use:
-```
-* CREATE
-    * HTTP Method: POST 
-    * URL: localhost:8080/employee
-    * PAYLOAD: Employee
-    * RESPONSE: Employee
-* READ
-    * HTTP Method: GET 
-    * URL: localhost:8080/employee/{id}
-    * RESPONSE: Employee
-* UPDATE
-    * HTTP Method: PUT 
-    * URL: localhost:8080/employee/{id}
-    * PAYLOAD: Employee
-    * RESPONSE: Employee
-```
-The Employee has a JSON schema of:
-```json
-{
-  "type":"Employee",
-  "properties": {
-    "employeeId": {
-      "type": "string"
-    },
-    "firstName": {
-      "type": "string"
-    },
-    "lastName": {
-          "type": "string"
-    },
-    "position": {
-          "type": "string"
-    },
-    "department": {
-          "type": "string"
-    },
-    "directReports": {
-      "type": "array",
-      "items" : "string"
-    }
-  }
-}
-```
-For all endpoints that require an "id" in the URL, this is the "employeeId" field.
 
 ### Task 1
 Create a new type, ReportingStructure, that has two properties: employee and numberOfReports.
@@ -125,6 +86,12 @@ Here's a simple overview diagram of the application (showing only the most impor
 ## 🚀 Running it 🚀
 - The application may be executed by running `gradlew bootRun`.
 
+## 📧 Endpoints 📧
+
+You can access the API documentation going to: http://localhost:8080/swagger-ui/index.html
+Note that you need to be running the service for that, of course.
+In there you can find a description of every endpoint offered and how to use it.
+
 ## 🚧 Tasks Backlog 🚧
 #### Core:
 - [x] Create unit tests for EmployeeController methods
@@ -152,11 +119,11 @@ Here's a simple overview diagram of the application (showing only the most impor
 - [x] Create Compensation controller tests
 - [x] Create Compensation controller
 - [x] Include CI with GitHub actions (Build+Tests)
+- [x] Add Swagger API documentation
 
 #### Extra:
 - [ ] Paginate Compensation read endpoint
 - [ ] Implement security using JWT
 - [ ] Add advice to log duration of requests
-- [ ] Add Swagger API documentation
 - [ ] Dockerize application
 - [ ] Host live demo on AWS
