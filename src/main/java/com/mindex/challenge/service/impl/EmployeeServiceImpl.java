@@ -42,7 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         LOG.debug("Reading employee with id [{}]", id);
         Employee employee = employeeRepository.findByEmployeeId(id);
         if (employee == null) {
-            throw new EmployeeNotFoundException("Could not find employee with id " + id);
+            throw new EmployeeNotFoundException(id);
         }
 
         EmployeeDto dto = employeeAdapter.entityToDto(employee);

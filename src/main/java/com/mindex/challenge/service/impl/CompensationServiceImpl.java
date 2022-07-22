@@ -35,21 +35,20 @@ public class CompensationServiceImpl implements CompensationService {
 
         Compensation compensation = compensationAdapter.dtoToEntity(compensationDto);
         compensationRepository.insert(compensation);
-        //Create constructor for notFoundExceptions receiving only the id
         return compensationDto;
     }
 
     private void validateEmployee(CompensationDto compensationDto) {
         Employee existingEmployee = employeeRepository.findByEmployeeId(compensationDto.employeeId);
         if (existingEmployee == null) {
-            throw new EmployeeNotFoundException("Could not find employee with id " + compensationDto.employeeId);
+            throw new EmployeeNotFoundException(employeeId);
         }
     }
 
     private void checkForDuplication(CompensationDto compensationDto) {
         Compensation preExisting = compensationRepository.findByEmployeeId(compensationDto.employeeId);
         if (preExisting != null) {
-            throw new DuplicateCompensationException("Compensation already exists for employee id " + compensationDto.employeeId);
+            throw new DuplicateCompensationException(compensationDto.employeeId);
         }
     }
 

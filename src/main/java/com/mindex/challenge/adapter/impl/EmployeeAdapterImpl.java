@@ -35,7 +35,7 @@ public class EmployeeAdapterImpl implements EmployeeAdapter {
         for (String employeeId : dto.directReports) {
             directReport = employeeRepository.findByEmployeeId(employeeId);
             if (directReport == null) {
-                throw new DirectReportEmployeeNotFoundException("Couldn't find direct reported employee with id " + employeeId);
+                throw new DirectReportEmployeeNotFoundException(employeeId);
             }
 
             directReports.add(directReport);

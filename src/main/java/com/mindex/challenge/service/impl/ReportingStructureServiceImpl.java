@@ -27,7 +27,7 @@ public class ReportingStructureServiceImpl implements ReportingStructureService 
 
         Employee employee = employeeRepository.findByEmployeeId(employeeId);
         if (employee == null) {
-            throw new EmployeeNotFoundException("Could not find employee with id " + employeeId);
+            throw new EmployeeNotFoundException(employeeId);
         }
 
         EmployeeDto dto = employeeAdapter.entityToDto(employee);

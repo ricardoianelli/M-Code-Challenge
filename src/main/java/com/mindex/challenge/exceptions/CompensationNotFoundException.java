@@ -7,9 +7,9 @@ public class CompensationNotFoundException extends RuntimeException {
     public CompensationNotFoundException() {
     }
 
-    public CompensationNotFoundException(String message) {
+    public CompensationNotFoundException(String id) {
         super();
-        this.message = message;
+        this.message = "Couldn't find compensation for employee with id " + id;
     }
 
     public String getMessage() {

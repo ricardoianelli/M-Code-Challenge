@@ -7,9 +7,9 @@ public class DirectReportEmployeeNotFoundException extends RuntimeException {
     public DirectReportEmployeeNotFoundException() {
     }
 
-    public DirectReportEmployeeNotFoundException(String message) {
+    public DirectReportEmployeeNotFoundException(String id) {
         super();
-        this.message = message;
+        this.message = "Couldn't find direct report employee with id " + id;
     }
 
     public String getMessage() {

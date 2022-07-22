@@ -7,9 +7,9 @@ public class DuplicateCompensationException extends RuntimeException {
     public DuplicateCompensationException() {
     }
 
-    public DuplicateCompensationException(String message) {
+    public DuplicateCompensationException(String id) {
         super();
-        this.message = message;
+        this.message = "Duplicate compensation for employee with id " + id;
     }
 
     public String getMessage() {
