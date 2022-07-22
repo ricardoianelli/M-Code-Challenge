@@ -7,7 +7,6 @@ import com.mindex.challenge.data.Compensation;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.CompensationDto;
 import com.mindex.challenge.dto.Compensations;
-import com.mindex.challenge.exceptions.DuplicateCompensationException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.CompensationService;
 import com.mindex.challenge.utils.CompensationComparer;
@@ -85,23 +84,6 @@ public class CompensationServiceImplTests {
         CompensationDto dto = new CompensationDto(compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
 
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(null);
-        when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(null);
-
-        compensationService.create(employeeId, dto);
-
-        verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
-        verify(compensationRepository, times(1)).findByEmployeeId(employeeId);
-        verify(compensationRepository, times(0)).insert(compensation);
-    }
-
-    @Test(expected = DuplicateCompensationException.class)
-    @DisplayName("Create duplicate compensation should throw exception")
-    public void create_givenAlreadyExistingCompensation_ShouldThrowException() {
-
-        final String employeeId = "1";
-        CompensationDto dto = new CompensationDto(compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
-
-        when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(compensation);
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(null);
 
         compensationService.create(employeeId, dto);
