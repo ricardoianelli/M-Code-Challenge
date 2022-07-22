@@ -63,6 +63,8 @@ public class EmployeeController {
             @ApiResponse(description = "Updated successfully", responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeDto.class))),
             @ApiResponse(description = "Invalid direct reports", responseCode = "400",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))),
+            @ApiResponse(description = "Invalid input", responseCode = "400",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class)))
     })
     public ResponseEntity<?> update(@PathVariable String id, @Valid @RequestBody EmployeeDto employee) {
