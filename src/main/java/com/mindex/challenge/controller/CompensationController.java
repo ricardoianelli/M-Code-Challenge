@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -32,9 +33,11 @@ public class CompensationController {
             @ApiResponse(description = "Compensation included Successfully", responseCode = "201",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = CompensationDto.class))),
             @ApiResponse(description = "Employee not found", responseCode = "404",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class))),
+            @ApiResponse(description = "Invalid input", responseCode = "400",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class)))
     })
-    public ResponseEntity<?> create(@PathVariable String id, @RequestBody CompensationDto compensationDto) {
+    public ResponseEntity<?> create(@PathVariable String id, @Valid @RequestBody CompensationDto compensationDto) {
         LOG.debug("Received compensation create request for employee id {}", id);
         try {
             CompensationDto createdCompensation = compensationService.create(id, compensationDto);
