@@ -121,10 +121,11 @@ In there you can find a description of every endpoint offered and how to use it.
 - [x] Create Compensation controller
 - [x] Include CI with GitHub actions (Build+Tests)
 - [x] Add Swagger API documentation
+- [x] Add request logging with duration, status code and URI
+- [ ] Add validations to DTOs
+- [ ] Paginate Compensation read endpoint
 
 #### Extra:
-- [ ] Paginate Compensation read endpoint
 - [ ] Implement security using JWT
-- [ ] Add advice to log duration of requests
 - [ ] Dockerize application
 - [ ] Host live demo on AWS
