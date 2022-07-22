@@ -81,7 +81,7 @@ public class CompensationControllerTests {
     public void create_givenANotExistentEmployee_ShouldReturn404() throws Exception {
 
         final String employeeId = "1";
-        CompensationDto compensationDto = new CompensationDto(new BigDecimal("24.9"), LocalDate.parse("2022-08-01"));
+        CompensationDto compensationDto = new CompensationDto(new BigDecimal("24.9"), LocalDate.parse("2021-08-01"));
         when(compensationService.create(any(), any())).thenThrow(EmployeeNotFoundException.class);
 
         mockMvc.perform(post(BASE_ROUTE + employeeId + "/compensation")
@@ -92,11 +92,63 @@ public class CompensationControllerTests {
     }
 
     @Test
+    @DisplayName("POST /employee/{id}/compensation with invalid salary returns BadRequest")
+    public void create_givenAnInvalidSalary_ShouldReturn400() throws Exception {
+
+        final String employeeId = "1";
+        CompensationDto compensationDto = new CompensationDto(new BigDecimal("-10"), LocalDate.parse("2021-08-01"));
+
+        mockMvc.perform(post(BASE_ROUTE + employeeId + "/compensation")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(compensationDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("POST /employee/{id}/compensation with null salary returns BadRequest")
+    public void create_givenNullSalary_ShouldReturn400() throws Exception {
+
+        final String employeeId = "1";
+        CompensationDto compensationDto = new CompensationDto(null, LocalDate.now().minusDays(1));
+
+        mockMvc.perform(post(BASE_ROUTE + employeeId + "/compensation")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(compensationDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("POST /employee/{id}/compensation with effectiveDate in the future returns BadRequest")
+    public void create_givenAnEffectiveDateInTheFuture_ShouldReturn400() throws Exception {
+
+        final String employeeId = "1";
+        CompensationDto compensationDto = new CompensationDto(new BigDecimal("24.90"), LocalDate.now().plusYears(1));
+
+        mockMvc.perform(post(BASE_ROUTE + employeeId + "/compensation")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(compensationDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("POST /employee/{id}/compensation with null effectiveDate returns BadRequest")
+    public void create_givenNullEffectiveDate_ShouldReturn400() throws Exception {
+
+        final String employeeId = "1";
+        CompensationDto compensationDto = new CompensationDto(new BigDecimal("24.90"), null);
+
+        mockMvc.perform(post(BASE_ROUTE + employeeId + "/compensation")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonMapper.asJsonString(compensationDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     @DisplayName("POST /employee/{id}/compensation with valid employee should return Created")
     public void create_givenAValidInput_ShouldReturnCompensationDtoAnd201() throws Exception {
 
         final String employeeId = "1";
-        CompensationDto compensationDto = new CompensationDto(new BigDecimal("24.9"), LocalDate.parse("2022-08-01"));
+        CompensationDto compensationDto = new CompensationDto(new BigDecimal("24.9"), LocalDate.parse("2021-08-01"));
 
         when(compensationService.create(any(), any())).thenReturn(compensationDto);
 
