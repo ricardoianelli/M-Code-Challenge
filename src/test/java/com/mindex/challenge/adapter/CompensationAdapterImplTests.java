@@ -1,14 +1,9 @@
 package com.mindex.challenge.adapter;
 
 import com.mindex.challenge.dao.CompensationRepository;
-import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Compensation;
-import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.CompensationDto;
-import com.mindex.challenge.dto.EmployeeDto;
-import com.mindex.challenge.exceptions.DirectReportEmployeeNotFoundException;
 import com.mindex.challenge.utils.CompensationComparer;
-import com.mindex.challenge.utils.EmployeeComparer;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -20,11 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.HashSet;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
@@ -52,7 +43,8 @@ public class CompensationAdapterImplTests {
     @Test
     @DisplayName("Convert Compensation DTO to Entity")
     public void dtoToEntity_givenAValidDto_ReturnsMatchingEntity() {
-        CompensationDto dto = new CompensationDto(entity.getEmployeeId(), entity.getSalary().toString(), entity.getEffectiveDate().toString());
+        final String employeeId = "1";
+        CompensationDto dto = new CompensationDto(employeeId, entity.getSalary().toString(), entity.getEffectiveDate().toString());
 
         when(compensationRepository.findByEmployeeId(dto.employeeId)).thenReturn(entity);
 
