@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -31,7 +32,7 @@ public class EmployeeController {
             @ApiResponse(description = "Created Successfully", responseCode = "201",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeDto.class)))
     })
-    public ResponseEntity<?> create(@RequestBody EmployeeDto employee) {
+    public ResponseEntity<?> create(@Valid @RequestBody EmployeeDto employee) {
         LOG.debug("Received employee create request for [{}]", employee);
         try {
             EmployeeDto createdEmployee = employeeService.create(employee);
@@ -64,7 +65,7 @@ public class EmployeeController {
             @ApiResponse(description = "Invalid direct reports", responseCode = "400",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class)))
     })
-    public ResponseEntity<?> update(@PathVariable String id, @RequestBody EmployeeDto employee) {
+    public ResponseEntity<?> update(@PathVariable String id, @Valid @RequestBody EmployeeDto employee) {
         LOG.debug("Received employee update request for id [{}] and employee [{}]", id, employee);
 
         try {
