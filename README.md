@@ -1,3 +1,5 @@
+[![CI](https://github.com/ricardoianelli/m-code-challenge/actions/workflows/gradle.yml/badge.svg)](https://github.com/ricardoianelli/m-code-challenge/actions/workflows/gradle.yml)
+
 <h1 align="center">
    💻 Code Challenge - Company M. 💻
 </h1>
@@ -149,6 +151,7 @@ Here's a simple overview diagram of the application (showing only the most impor
 - [x] Create Compensation service implementation
 - [x] Create Compensation controller tests
 - [x] Create Compensation controller
+- [x] Include CI with GitHub actions (Build+Tests)
 
 #### Extra:
 - [ ] Paginate Compensation read endpoint
@@ -156,5 +159,4 @@ Here's a simple overview diagram of the application (showing only the most impor
 - [ ] Add advice to log duration of requests
 - [ ] Add Swagger API documentation
 - [ ] Dockerize application
-- [ ] Include CI with GitHub actions
 - [ ] Host live demo on AWS
