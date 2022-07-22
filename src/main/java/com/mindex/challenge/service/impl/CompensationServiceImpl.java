@@ -12,6 +12,8 @@ import com.mindex.challenge.service.CompensationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,14 +50,15 @@ public class CompensationServiceImpl implements CompensationService {
     }
 
     @Override
-    public Compensations read(String employeeId) {
+    public Compensations read(Pageable pagination, String employeeId) {
         validateEmployee(employeeId);
+        Page<Compensation> compensationPage = compensationRepository.findAllByEmployeeId(employeeId, pagination);
+        List<Compensation> compensationList = compensationPage.toList();
 
-        List<Compensation> compensations = compensationRepository.findAllByEmployeeId(employeeId);
-        if (compensations == null ) {
-            compensations = new ArrayList<>();
-        }
+        Compensations compensations = compensationAdapter.listOfEntityToCompensations(employeeId, compensationList);
+        compensations.totalCompensations = compensationPage.getTotalElements();
+        compensations.totalPages = compensationPage.getTotalPages() -1;
 
-        return compensationAdapter.listOfEntityToCompensations(employeeId, compensations);
+        return compensations;
     }
 }

@@ -17,6 +17,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -101,13 +105,16 @@ public class CompensationServiceImplTests {
         List<Compensation> compensationList = new ArrayList<>();
         compensationList.add(compensation);
 
-        when(compensationRepository.findAllByEmployeeId(employeeId)).thenReturn(compensationList);
+        Pageable pagination = PageRequest.of(0, 2);
+        Page<Compensation> compensationPage = new PageImpl<>(compensationList);
+
+        when(compensationRepository.findAllByEmployeeId(any(), any())).thenReturn(compensationPage);
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(employee);
 
-        Compensations compensations = compensationService.read(employeeId);
+        Compensations compensations = compensationService.read(pagination, employeeId);
         CompensationComparer.compareCompensationsWithCompensationList(compensations, compensationList);
 
-        verify(compensationRepository, times(1)).findAllByEmployeeId(employeeId);
+        verify(compensationRepository, times(1)).findAllByEmployeeId(any(), any());
         verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
     }
 
@@ -118,7 +125,9 @@ public class CompensationServiceImplTests {
 
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(null);
 
-        compensationService.read(employeeId);
+        Pageable pagination = PageRequest.of(0, 2);
+
+        compensationService.read(pagination, employeeId);
 
         verify(compensationRepository, times(1)).findByEmployeeId(employeeId);
     }
@@ -130,15 +139,18 @@ public class CompensationServiceImplTests {
         final String employeeId = "1";
         List<Compensation> compensationList = new ArrayList<>();
 
-        when(compensationRepository.findAllByEmployeeId(employeeId)).thenReturn(compensationList);
+        Pageable pagination = PageRequest.of(0, 2);
+        Page<Compensation> compensationPage = new PageImpl<>(compensationList);
+
+        when(compensationRepository.findAllByEmployeeId(any(), any())).thenReturn(compensationPage);
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(employee);
 
-        Compensations compensations = compensationService.read(employeeId);
+        Compensations compensations = compensationService.read(pagination, employeeId);
 
         assertEquals(compensations.employee, employeeId);
         assertTrue(compensations.compensations.isEmpty());
 
-        verify(compensationRepository, times(1)).findAllByEmployeeId(employeeId);
+        verify(compensationRepository, times(1)).findAllByEmployeeId(any(), any());
         verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
     }
 }

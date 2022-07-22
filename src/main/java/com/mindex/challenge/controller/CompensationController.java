@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
-@Tag(name="Compensation")
+@Tag(name = "Compensation")
 @RequestMapping("/employee/{id}/compensation")
 public class CompensationController {
     private static final Logger LOG = LoggerFactory.getLogger(CompensationController.class);
@@ -56,9 +59,25 @@ public class CompensationController {
             @ApiResponse(description = "Employee not found", responseCode = "404",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class)))
     })
-    public ResponseEntity<?> read(@PathVariable String id) {
+    public ResponseEntity<?> read(@PathVariable String id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         LOG.debug("Received compensation read request for employee id {}", id);
-        Compensations compensations = compensationService.read(id);
-        return ResponseEntity.ok(compensations);
+        Pageable pagination = PageRequest.of(page, size);
+        Compensations compensations = compensationService.read(pagination, id);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        addPaginationInfoToHeaders(responseHeaders, page, compensations.totalPages, compensations.totalCompensations);
+
+        return ResponseEntity
+                .ok()
+                .headers(responseHeaders)
+                .body(compensations);
+    }
+
+    private void addPaginationInfoToHeaders(HttpHeaders httpHeaders, int page, int totalPages, long totalElements) {
+        httpHeaders.set("firstPage", "0");
+        httpHeaders.set("prevPage", "" + Math.max(0, (Math.min(totalPages, (page - 1)))));
+        httpHeaders.set("nextPage", "" +  Math.max(0, (Math.min(totalPages, (page + 1)))));
+        httpHeaders.set("lastPage", "" + totalPages);
+        httpHeaders.set("totalElements", "" + totalElements);
     }
 }

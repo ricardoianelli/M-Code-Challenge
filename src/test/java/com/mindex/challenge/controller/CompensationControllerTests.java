@@ -58,7 +58,7 @@ public class CompensationControllerTests {
 
         final String employeeId = "1";
         Compensations compensations = new Compensations(employeeId);
-        when(compensationService.read(employeeId)).thenReturn(compensations);
+        when(compensationService.read(any(), any())).thenReturn(compensations);
 
         mockMvc.perform(get(BASE_ROUTE + employeeId + "/compensation"))
                 .andExpect(status().isOk())
@@ -69,7 +69,7 @@ public class CompensationControllerTests {
     @Test
     @DisplayName("GET /employee/1/compensation with a not existent employee should return Not Found")
     public void read_givenANotExistentId_ShouldReturn404() throws Exception {
-        when(compensationService.read(anyString())).thenThrow(EmployeeNotFoundException.class);
+        when(compensationService.read(any(), any())).thenThrow(EmployeeNotFoundException.class);
 
         mockMvc.perform(get(BASE_ROUTE + "1/compensation"))
                 .andExpect(status().isNotFound())
