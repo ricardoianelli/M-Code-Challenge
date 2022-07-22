@@ -1,6 +1,5 @@
 package com.mindex.challenge.controller;
 
-import com.mindex.challenge.exceptions.CompensationNotFoundException;
 import com.mindex.challenge.exceptions.DirectReportEmployeeNotFoundException;
 import com.mindex.challenge.exceptions.DuplicateCompensationException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
@@ -33,13 +32,6 @@ public class ControllerExceptionAdvice {
     public ResponseEntity<StandardError> handleDuplicateCompensationException(DuplicateCompensationException ex, HttpServletRequest request) {
         String errorMsg = ex.getMessage();
         HttpStatus status = HttpStatus.CONFLICT;
-        return getResponseError(errorMsg, status, request);
-    }
-
-    @ExceptionHandler(CompensationNotFoundException.class)
-    public ResponseEntity<StandardError> handleCompensationNotFound(CompensationNotFoundException ex, HttpServletRequest request) {
-        String errorMsg = ex.getMessage();
-        HttpStatus status = HttpStatus.NOT_FOUND;
         return getResponseError(errorMsg, status, request);
     }
 
