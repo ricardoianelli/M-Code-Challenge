@@ -129,6 +129,7 @@ public class CompensationServiceImplTests {
     public void read_givenANotPersistedCompensation_ShouldThrowCompensationNotFoundException() {
         final String employeeId = "1";
 
+        when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(employee);
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(null);
 
         compensationService.read(employeeId);
