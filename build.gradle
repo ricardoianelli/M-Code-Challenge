@@ -29,4 +29,5 @@ dependencies {
     testImplementation ('org.springframework.boot:spring-boot-starter-test')
 	implementation (group: 'de.bwaldvogel', name: 'mongo-java-server', version: '1.25.0')
 	implementation('org.springdoc:springdoc-openapi-ui:1.6.9')
+	compile ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 }
