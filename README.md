@@ -120,6 +120,7 @@ Here's a simple overview diagram of the application (showing only the most impor
 - The application may be executed by running `gradlew bootRun`.
 
 ## 🚧 Tasks Backlog 🚧
+#### Core:
 - [x] Create unit tests for EmployeeController methods
 - [x] Create unit tests for EmployeeServiceImpl
 - [x] Refactor controller to respect REST best practices
@@ -142,9 +143,14 @@ Here's a simple overview diagram of the application (showing only the most impor
 - [x] Create Compensations DTO
 - [x] Create Compensation service tests
 - [x] Create Compensation service implementation
-- [ ] Create Compensation controller tests
-- [ ] Create Compensation controller
+- [x] Create Compensation controller tests
+- [x] Create Compensation controller
+
+#### Extra:
+- [ ] Paginate Compensation read endpoint
+- [ ] Implement security using JWT
 - [ ] Add advice to log duration of requests
-- [ ] Dockerize application
 - [ ] Add Swagger API documentation
+- [ ] Dockerize application
 - [ ] Include CI with GitHub actions
+- [ ] Host live demo on AWS
