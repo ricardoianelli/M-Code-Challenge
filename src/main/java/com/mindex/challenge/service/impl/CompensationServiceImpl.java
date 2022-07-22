@@ -6,7 +6,7 @@ import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Compensation;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.CompensationDto;
-import com.mindex.challenge.exceptions.CompensationNotFoundException;
+import com.mindex.challenge.dto.Compensations;
 import com.mindex.challenge.exceptions.DuplicateCompensationException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.CompensationService;
@@ -14,6 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CompensationServiceImpl implements CompensationService {
@@ -30,11 +33,11 @@ public class CompensationServiceImpl implements CompensationService {
     private CompensationAdapter compensationAdapter;
 
     @Override
-    public CompensationDto create(CompensationDto compensationDto) {
-        checkForDuplication(compensationDto);
-        validateEmployee(compensationDto.employeeId);
+    public CompensationDto create(String employeeId, CompensationDto compensationDto) {
+        checkForDuplication(employeeId);
+        validateEmployee(employeeId);
 
-        Compensation compensation = compensationAdapter.dtoToEntity(compensationDto);
+        Compensation compensation = compensationAdapter.dtoToEntity(employeeId, compensationDto);
         compensationRepository.insert(compensation);
         return compensationDto;
     }
@@ -46,22 +49,22 @@ public class CompensationServiceImpl implements CompensationService {
         }
     }
 
-    private void checkForDuplication(CompensationDto compensationDto) {
-        Compensation preExisting = compensationRepository.findByEmployeeId(compensationDto.employeeId);
+    private void checkForDuplication(String employeeId) {
+        Compensation preExisting = compensationRepository.findByEmployeeId(employeeId);
         if (preExisting != null) {
-            throw new DuplicateCompensationException(compensationDto.employeeId);
+            throw new DuplicateCompensationException(employeeId);
         }
     }
 
     @Override
-    public CompensationDto read(String employeeId) {
+    public Compensations read(String employeeId) {
         validateEmployee(employeeId);
 
-        Compensation preExisting = compensationRepository.findByEmployeeId(employeeId);
-        if (preExisting == null) {
-            throw new CompensationNotFoundException(employeeId);
+        List<Compensation> compensations = compensationRepository.findAllByEmployeeId(employeeId);
+        if (compensations == null ) {
+            compensations = new ArrayList<>();
         }
 
-        return compensationAdapter.entityToDto(preExisting);
+        return compensationAdapter.listOfEntityToCompensations(employeeId, compensations);
     }
 }
