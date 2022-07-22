@@ -3,6 +3,7 @@ package com.mindex.challenge.adapter;
 import com.mindex.challenge.dao.CompensationRepository;
 import com.mindex.challenge.data.Compensation;
 import com.mindex.challenge.dto.CompensationDto;
+import com.mindex.challenge.dto.Compensations;
 import com.mindex.challenge.utils.CompensationComparer;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,6 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 
@@ -44,11 +47,11 @@ public class CompensationAdapterImplTests {
     @DisplayName("Convert Compensation DTO to Entity")
     public void dtoToEntity_givenAValidDto_ReturnsMatchingEntity() {
         final String employeeId = "1";
-        CompensationDto dto = new CompensationDto(employeeId, entity.getSalary().toString(), entity.getEffectiveDate().toString());
+        CompensationDto dto = new CompensationDto(entity.getSalary().toString(), entity.getEffectiveDate().toString());
 
-        when(compensationRepository.findByEmployeeId(dto.employeeId)).thenReturn(entity);
+        when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(entity);
 
-        Compensation resultEntity = compensationAdapter.dtoToEntity(dto);
+        Compensation resultEntity = compensationAdapter.dtoToEntity(employeeId, dto);
 
         CompensationComparer.compareEntityAndDto(resultEntity, dto);
     }
@@ -58,5 +61,17 @@ public class CompensationAdapterImplTests {
     public void entityToDto_givenAValidEntity_ReturnsMatchingDto() {
         CompensationDto resultDto = compensationAdapter.entityToDto(entity);
         CompensationComparer.compareEntityAndDto(entity, resultDto);
+    }
+
+    @Test
+    @DisplayName("Convert list of Compensation to Compensations DTO")
+    public void listOfEntityToCompensations_givenAValidList_ReturnsMatchingDto() {
+        final String employeeId = "1";
+        List<Compensation> compensationList = new ArrayList<>();
+        compensationList.add(new Compensation(employeeId, new BigDecimal("123"), LocalDate.now()));
+        compensationList.add(new Compensation(employeeId, new BigDecimal("456"), LocalDate.now().minusDays(1)));
+
+        Compensations compensations = compensationAdapter.listOfEntityToCompensations(employeeId, compensationList);
+        CompensationComparer.compareCompensationsWithCompensationList(compensations, compensationList);
     }
 }

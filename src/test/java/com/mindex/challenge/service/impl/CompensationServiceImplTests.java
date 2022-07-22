@@ -6,7 +6,7 @@ import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Compensation;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.CompensationDto;
-import com.mindex.challenge.exceptions.CompensationNotFoundException;
+import com.mindex.challenge.dto.Compensations;
 import com.mindex.challenge.exceptions.DuplicateCompensationException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.CompensationService;
@@ -22,8 +22,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -62,13 +66,13 @@ public class CompensationServiceImplTests {
     @DisplayName("Create compensation returns a new compensation")
     public void create_givenAValidEmployeeId_ShouldPersistAndReturnCompensationDto() {
         final String employeeId = "1";
-        CompensationDto dto = new CompensationDto(employeeId, compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
+        CompensationDto dto = new CompensationDto(compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
 
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(employee);
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(null);
         when(compensationRepository.insert(compensation)).thenReturn(compensation);
 
-        CompensationDto persisted = compensationService.create(dto);
+        CompensationDto persisted = compensationService.create(employeeId, dto);
         CompensationComparer.compareDtos(persisted, dto);
         verify(compensationRepository, times(1)).insert(compensation);
     }
@@ -78,12 +82,12 @@ public class CompensationServiceImplTests {
     public void create_givenInvalidEmployeeId_ShouldThrowException() {
 
         final String employeeId = "1";
-        CompensationDto dto = new CompensationDto(employeeId, compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
+        CompensationDto dto = new CompensationDto(compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
 
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(null);
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(null);
 
-        compensationService.create(dto);
+        compensationService.create(employeeId, dto);
 
         verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
         verify(compensationRepository, times(1)).findByEmployeeId(employeeId);
@@ -95,12 +99,12 @@ public class CompensationServiceImplTests {
     public void create_givenAlreadyExistingCompensation_ShouldThrowException() {
 
         final String employeeId = "1";
-        CompensationDto dto = new CompensationDto(employeeId, compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
+        CompensationDto dto = new CompensationDto(compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
 
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(compensation);
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(null);
 
-        compensationService.create(dto);
+        compensationService.create(employeeId, dto);
 
         verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
         verify(compensationRepository, times(1)).findByEmployeeId(employeeId);
@@ -108,32 +112,51 @@ public class CompensationServiceImplTests {
     }
 
     @Test
-    @DisplayName("Read compensation with a valid employee id returns a compensation from DB")
-    public void read_givenAValidEmployeeId_ShouldReturnCompensationDto() {
+    @DisplayName("Read compensation with a valid employee id returns compensations from DB")
+    public void read_givenAValidEmployeeId_ShouldReturnCompensations() {
 
         final String employeeId = "1";
-        CompensationDto dto = new CompensationDto(employeeId, compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
+        List<Compensation> compensationList = new ArrayList<>();
+        compensationList.add(compensation);
 
-        when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(compensation);
+        when(compensationRepository.findAllByEmployeeId(employeeId)).thenReturn(compensationList);
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(employee);
 
-        CompensationDto persistedCompensation = compensationService.read(employeeId);
-        CompensationComparer.compareDtos(persistedCompensation, dto);
+        Compensations compensations = compensationService.read(employeeId);
+        CompensationComparer.compareCompensationsWithCompensationList(compensations, compensationList);
 
-        verify(compensationRepository, times(1)).findByEmployeeId(employeeId);
+        verify(compensationRepository, times(1)).findAllByEmployeeId(employeeId);
         verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
     }
 
-    @Test(expected = CompensationNotFoundException.class)
-    @DisplayName("Read compensation that doesn't exist throws CompensationNotFound exception")
-    public void read_givenANotPersistedCompensation_ShouldThrowCompensationNotFoundException() {
+    @Test(expected = EmployeeNotFoundException.class)
+    @DisplayName("Read compensations for an invalid employee should throw exception")
+    public void read_givenANotPersistedCompensation_ShouldThrowEmployeeNotFoundException() {
         final String employeeId = "1";
 
-        when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(employee);
-        when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(null);
+        when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(null);
 
         compensationService.read(employeeId);
 
         verify(compensationRepository, times(1)).findByEmployeeId(employeeId);
+    }
+
+    @Test
+    @DisplayName("Read compensation for an employee without any compensations returns empty Compensations")
+    public void read_givenAnEmployeeWithoutCompensations_ShouldReturnEmptyCompensations() {
+
+        final String employeeId = "1";
+        List<Compensation> compensationList = new ArrayList<>();
+
+        when(compensationRepository.findAllByEmployeeId(employeeId)).thenReturn(compensationList);
+        when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(employee);
+
+        Compensations compensations = compensationService.read(employeeId);
+
+        assertEquals(compensations.employee, employeeId);
+        assertTrue(compensations.compensations.isEmpty());
+
+        verify(compensationRepository, times(1)).findAllByEmployeeId(employeeId);
+        verify(employeeRepository, times(1)).findByEmployeeId(employeeId);
     }
 }
