@@ -107,7 +107,11 @@ Since I wanted to do TDD (Test Driven Development), I decided to start creating 
 
 After this initial tests creation, I've created tests for an EmployeeDto and EmployeeAdapter classes, and after that I started the creation of the actual EmployeeDto and EmployeeAdapter, responsible to decouple the domain from external clients and give more flexibility during the lifetime of the project, and was safe since I had tests to back me up during the entire process.
 
-There's also a Postman collection to make it easier to test the web api's.
+I also created a Postman collection and kept it always updated here in the repository as well, so that people can use it  for an easier experience.
+
+Thinking about the tasks took most of the time, since for me they were really open. What is a Compensation? Is it a fixed, one-to-one with employee telling his curret salary, or it's something used to store each payment this employee gets? I went for the second option in the middle of the way, so it took me more refactoring.
+
+I still have lots of ideas to implement and improve the code, but I've been playing with that for too long now and I'm afraid I need to deliver it, so I'll probably leave the room open for improvement in the next days as bonus improvements.
 
 
 ## 🏛️ Architecture 🏛️
