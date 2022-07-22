@@ -104,6 +104,58 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Compensation",
+			"item": [
+				{
+					"name": "Read Compensation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/employee/16a596ae-edd3-4847-99fe-c4518e82c86f/compensation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"employee",
+								"16a596ae-edd3-4847-99fe-c4518e82c86f",
+								"compensation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Compensation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"salary\": \"26.9\",\r\n    \"effectiveDate\": \"2022-09-22\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/employee/16a596ae-edd3-4847-99fe-c4518e82c86f/compensation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"employee",
+								"16a596ae-edd3-4847-99fe-c4518e82c86f",
+								"compensation"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
