@@ -1,6 +1,6 @@
 package com.mindex.challenge.service.impl;
 
-import com.mindex.challenge.adapter.CompensationAdapter;
+import com.mindex.challenge.adapter.EmployeeAdapter;
 import com.mindex.challenge.dao.CompensationRepository;
 import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Compensation;
@@ -10,6 +10,7 @@ import com.mindex.challenge.exceptions.CompensationNotFoundException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.CompensationService;
 import com.mindex.challenge.utils.CompensationComparer;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -32,13 +33,23 @@ public class CompensationServiceImplTests {
     CompensationService compensationService;
 
     @Autowired
-    CompensationAdapter compensationAdapter;
+    EmployeeAdapter employeeAdapter;
 
     @MockBean
     CompensationRepository compensationRepository;
 
     @MockBean
     EmployeeRepository employeeRepository;
+
+    static Employee employee;
+    static Compensation compensation;
+
+    @BeforeClass
+    public static void setupObjects() {
+        final String employeeId = "1";
+        employee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        compensation = new Compensation(employeeId, new BigDecimal("10000"), LocalDate.parse("2022-08-01"));
+    }
 
     @Test
     @DisplayName("Smoke test for Spring DI")
@@ -49,12 +60,8 @@ public class CompensationServiceImplTests {
     @Test
     @DisplayName("Create compensation returns a new compensation")
     public void create_givenAValidEmployeeId_ShouldPersistAndReturnCompensationDto() {
-
         final String employeeId = "1";
-        Employee employee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
-
-        Compensation compensation = new Compensation(employeeId, new BigDecimal("10000"), LocalDate.parse("8/1/2022"));
-        CompensationDto dto = compensationAdapter.entityToDto(compensation);
+        CompensationDto dto = new CompensationDto(employeeId, compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
 
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(employee);
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(null);
@@ -70,8 +77,7 @@ public class CompensationServiceImplTests {
     public void create_givenInvalidEmployeeId_ShouldThrowException() {
 
         final String employeeId = "1";
-        Compensation compensation = new Compensation(employeeId, new BigDecimal("10000"), LocalDate.parse("8/1/2022"));
-        CompensationDto dto = compensationAdapter.entityToDto(compensation);
+        CompensationDto dto = new CompensationDto(employeeId, compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
 
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(null);
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(null);
@@ -88,8 +94,7 @@ public class CompensationServiceImplTests {
     public void create_givenAlreadyExistingCompensation_ShouldThrowException() {
 
         final String employeeId = "1";
-        Compensation compensation = new Compensation(employeeId, new BigDecimal("10000"), LocalDate.parse("8/1/2022"));
-        CompensationDto dto = compensationAdapter.entityToDto(compensation);
+        CompensationDto dto = new CompensationDto(employeeId, compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
 
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(compensation);
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(null);
@@ -106,10 +111,7 @@ public class CompensationServiceImplTests {
     public void read_givenAValidEmployeeId_ShouldReturnCompensationDto() {
 
         final String employeeId = "1";
-        Employee employee = new Employee(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
-
-        Compensation compensation = new Compensation(employeeId, new BigDecimal("10000"), LocalDate.parse("8/1/2022"));
-        CompensationDto dto = compensationAdapter.entityToDto(compensation);
+        CompensationDto dto = new CompensationDto(employeeId, compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
 
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(compensation);
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(employee);
