@@ -74,8 +74,11 @@ I also created a Postman collection and kept it always updated here in the repos
 
 Thinking about the tasks took most of the time, since for me they were really open. What is a Compensation? Is it a fixed, one-to-one with employee telling his curret salary, or it's something used to store each payment this employee gets? I went for the second option in the middle of the way, so it took me more refactoring.
 
-I still have lots of ideas to implement and improve the code, but I've been playing with that for too long now and I'm afraid I need to deliver it, so I'll probably leave the room open for improvement in the next days as bonus improvements.
+I also wanted to include some extra features like automated endpoint documentation with Swagger/OpenAPI, validations, pagination to the compensations READ endpoint, CI with GitHub Actions (it's building and testing the code on every push) and a requests logger that informs the URI, HTTP method and duration of each request on every endpoint in the application.
 
+I wanted to include more extra things like JWT authentication and authorization, create a Dockerfile for the application and host a live version of it on AWS, but I'll probably do it in the future, mainly for fun and continuous improvement.
+
+Overall it was a very fun challenge that I could have finished within few minutes or hours if I didn't care about quality so much, but since I didn't had a deadline, I took my time to do the best I could given my actual conditions. (I got a severe torticollis in the day I started this, that slowed me down a lot)
 
 ## 🏛️ Architecture 🏛️
 
