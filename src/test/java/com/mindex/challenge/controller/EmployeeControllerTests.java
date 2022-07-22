@@ -74,9 +74,10 @@ public class EmployeeControllerTests {
     public void create_givenAValidInput_ShouldReturnEmployeeAnd201() throws Exception {
 
         final String employeeId = "1";
-        EmployeeDto exampleEmployee = new EmployeeDto(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        EmployeeDto exampleEmployee = new EmployeeDto(null, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        EmployeeDto expectedResponse = new EmployeeDto(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
 
-        when(employeeService.create(any())).thenReturn(exampleEmployee);
+        when(employeeService.create(any())).thenReturn(expectedResponse);
 
         mockMvc.perform(post(BASE_ROUTE)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -97,22 +98,23 @@ public class EmployeeControllerTests {
     public void update_givenAValidInput_ShouldReturnEmployeeAnd200() throws Exception {
 
         final String employeeId = "1";
-        EmployeeDto exampleEmployee = new EmployeeDto(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        EmployeeDto employeeRequest = new EmployeeDto(null, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        EmployeeDto expectedResponse = new EmployeeDto(employeeId, "Ricardo", "Ianelli", "Software Engineer", "IT");
 
-        when(employeeService.update(any(EmployeeDto.class))).thenReturn(exampleEmployee);
+        when(employeeService.update(any(EmployeeDto.class))).thenReturn(expectedResponse);
 
         mockMvc.perform(put(BASE_ROUTE + "/" + employeeId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonMapper.asJsonString(exampleEmployee)))
+                        .content(JsonMapper.asJsonString(employeeRequest)))
 
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.LOCATION, BASE_ROUTE + "/" + employeeId))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.employeeId").value(employeeId))
-                .andExpect(jsonPath("$.firstName").value(exampleEmployee.firstName))
-                .andExpect(jsonPath("$.lastName").value(exampleEmployee.lastName))
-                .andExpect(jsonPath("$.position").value(exampleEmployee.position))
-                .andExpect(jsonPath("$.department").value(exampleEmployee.department));
+                .andExpect(jsonPath("$.firstName").value(employeeRequest.firstName))
+                .andExpect(jsonPath("$.lastName").value(employeeRequest.lastName))
+                .andExpect(jsonPath("$.position").value(employeeRequest.position))
+                .andExpect(jsonPath("$.department").value(employeeRequest.department));
 
         verify(employeeService, times(1)).update(any(EmployeeDto.class));
     }
@@ -121,7 +123,8 @@ public class EmployeeControllerTests {
     @DisplayName("PUT /employee/{id} with invalid employee should return Not Found")
     public void update_givenANotExistentEmployee_ShouldReturnErrorAnd404() throws Exception {
         final String id = "1";
-        EmployeeDto exampleEmployee = new EmployeeDto(id, "Ricardo", "Ianelli", "Software Engineer", "IT");
+        EmployeeDto exampleEmployee = new EmployeeDto(null, "Ricardo", "Ianelli", "Software Engineer", "IT");
+
         when(employeeService.update(any(EmployeeDto.class))).thenThrow(EmployeeNotFoundException.class);
 
         mockMvc.perform(put(BASE_ROUTE + "/" + id)
