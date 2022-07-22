@@ -7,6 +7,7 @@ import com.mindex.challenge.data.Compensation;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.dto.CompensationDto;
 import com.mindex.challenge.exceptions.CompensationNotFoundException;
+import com.mindex.challenge.exceptions.DuplicateCompensationException;
 import com.mindex.challenge.exceptions.EmployeeNotFoundException;
 import com.mindex.challenge.service.CompensationService;
 import com.mindex.challenge.utils.CompensationComparer;
@@ -89,7 +90,7 @@ public class CompensationServiceImplTests {
         verify(compensationRepository, times(0)).insert(compensation);
     }
 
-    @Test(expected = EmployeeNotFoundException.class)
+    @Test(expected = DuplicateCompensationException.class)
     @DisplayName("Create duplicate compensation should throw exception")
     public void create_givenAlreadyExistingCompensation_ShouldThrowException() {
 
