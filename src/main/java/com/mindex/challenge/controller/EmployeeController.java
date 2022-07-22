@@ -2,6 +2,11 @@ package com.mindex.challenge.controller;
 
 import com.mindex.challenge.dto.EmployeeDto;
 import com.mindex.challenge.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
+@Tag(name="Employee")
 @RequestMapping("/employee")
 public class EmployeeController {
     private static final Logger LOG = LoggerFactory.getLogger(EmployeeController.class);
@@ -21,6 +27,10 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping
+    @Operation(summary = "Create new employee", responses = {
+            @ApiResponse(description = "Created Successfully", responseCode = "201",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeDto.class)))
+    })
     public ResponseEntity<?> create(@RequestBody EmployeeDto employee) {
         LOG.debug("Received employee create request for [{}]", employee);
         try {
@@ -34,6 +44,12 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Read employee information", responses = {
+            @ApiResponse(description = "Returned successfully", responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeDto.class))),
+            @ApiResponse(description = "Employee not found", responseCode = "404",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class)))
+    })
     public ResponseEntity<?> read(@PathVariable String id) {
         LOG.debug("Received employee read request for id [{}]", id);
         EmployeeDto existingEmployee = employeeService.read(id);
@@ -42,6 +58,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update employee information", responses = {
+            @ApiResponse(description = "Updated successfully", responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeDto.class))),
+            @ApiResponse(description = "Invalid direct reports", responseCode = "400",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class)))
+    })
     public ResponseEntity<?> update(@PathVariable String id, @RequestBody EmployeeDto employee) {
         LOG.debug("Received employee update request for id [{}] and employee [{}]", id, employee);
 
