@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 public class CompensationComparer {
     public static void compareEntityAndDto(Compensation entity, CompensationDto dto) {
         assertAll("Should match compensation entity and DTO",
-                () -> assertEquals("Salary match", entity.getSalary().toString(), dto.salary),
-                () -> assertEquals("Effective date match", entity.getEffectiveDate().toString(), dto.effectiveDate)
+                () -> assertEquals("Salary match", entity.getSalary(), dto.salary),
+                () -> assertEquals("Effective date match", entity.getEffectiveDate(), dto.effectiveDate)
         );
     }
 

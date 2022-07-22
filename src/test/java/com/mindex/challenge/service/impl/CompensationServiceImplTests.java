@@ -65,7 +65,7 @@ public class CompensationServiceImplTests {
     @DisplayName("Create compensation returns a new compensation")
     public void create_givenAValidEmployeeId_ShouldPersistAndReturnCompensationDto() {
         final String employeeId = "1";
-        CompensationDto dto = new CompensationDto(compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
+        CompensationDto dto = new CompensationDto(compensation.getSalary(), compensation.getEffectiveDate());
 
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(employee);
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(null);
@@ -81,7 +81,7 @@ public class CompensationServiceImplTests {
     public void create_givenInvalidEmployeeId_ShouldThrowException() {
 
         final String employeeId = "1";
-        CompensationDto dto = new CompensationDto(compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
+        CompensationDto dto = new CompensationDto(compensation.getSalary(), compensation.getEffectiveDate());
 
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(null);
         when(employeeRepository.findByEmployeeId(employeeId)).thenReturn(null);

@@ -47,7 +47,7 @@ public class CompensationAdapterImplTests {
     @DisplayName("Convert Compensation DTO to Entity")
     public void dtoToEntity_givenAValidDto_ReturnsMatchingEntity() {
         final String employeeId = "1";
-        CompensationDto dto = new CompensationDto(entity.getSalary().toString(), entity.getEffectiveDate().toString());
+        CompensationDto dto = new CompensationDto(entity.getSalary(), entity.getEffectiveDate());
 
         when(compensationRepository.findByEmployeeId(employeeId)).thenReturn(entity);
 

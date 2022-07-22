@@ -77,11 +77,11 @@ public class CompensationControllerTests {
     }
 
     @Test
-    @DisplayName("POST /employee/{id}/compensation with valid employee should return Created")
-    public void create_givenAValidInput_ShouldReturnCompensationDtoAnd201() throws Exception {
+    @DisplayName("POST /employee/{id}/compensation with not existent employee id should return Not Found")
+    public void create_givenANotExistentEmployee_ShouldReturn404() throws Exception {
 
         final String employeeId = "1";
-        CompensationDto compensationDto = new CompensationDto("24.9", "2022-08-01");
+        CompensationDto compensationDto = new CompensationDto(new BigDecimal("24.9"), LocalDate.parse("2022-08-01"));
         when(compensationService.create(any(), any())).thenThrow(EmployeeNotFoundException.class);
 
         mockMvc.perform(post(BASE_ROUTE + employeeId + "/compensation")
@@ -92,11 +92,12 @@ public class CompensationControllerTests {
     }
 
     @Test
-    @DisplayName("POST /employee/{id}/compensation with not existent employee id should return Not Found")
-    public void create_givenANotExistentEmployee_ShouldReturn404() throws Exception {
+    @DisplayName("POST /employee/{id}/compensation with valid employee should return Created")
+    public void create_givenAValidInput_ShouldReturnCompensationDtoAnd201() throws Exception {
 
         final String employeeId = "1";
-        CompensationDto compensationDto = new CompensationDto("24.9", "2022-08-01");
+        CompensationDto compensationDto = new CompensationDto(new BigDecimal("24.9"), LocalDate.parse("2022-08-01"));
+
         when(compensationService.create(any(), any())).thenReturn(compensationDto);
 
         mockMvc.perform(post(BASE_ROUTE + employeeId + "/compensation")
@@ -106,7 +107,7 @@ public class CompensationControllerTests {
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, BASE_ROUTE + employeeId + "/compensation"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.salary").value(compensationDto.salary))
-                .andExpect(jsonPath("$.effectiveDate").value(compensationDto.effectiveDate));
+                .andExpect(jsonPath("$.salary").value(compensationDto.salary.toString()))
+                .andExpect(jsonPath("$.effectiveDate").value(compensationDto.effectiveDate.toString()));
     }
 }

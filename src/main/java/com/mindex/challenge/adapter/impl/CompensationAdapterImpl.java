@@ -6,20 +6,18 @@ import com.mindex.challenge.dto.CompensationDto;
 import com.mindex.challenge.dto.Compensations;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @Component
 public class CompensationAdapterImpl implements CompensationAdapter {
     @Override
     public Compensation dtoToEntity(String employeeId, CompensationDto dto) {
-        return new Compensation(employeeId, new BigDecimal(dto.salary), LocalDate.parse(dto.effectiveDate));
+        return new Compensation(employeeId, dto.salary, dto.effectiveDate);
     }
 
     @Override
     public CompensationDto entityToDto(Compensation compensation) {
-        return new CompensationDto(compensation.getSalary().toString(), compensation.getEffectiveDate().toString());
+        return new CompensationDto(compensation.getSalary(), compensation.getEffectiveDate());
     }
 
     @Override
