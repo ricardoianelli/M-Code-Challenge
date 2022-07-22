@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -25,9 +22,6 @@ public class EmployeeServiceImplIntegrationTest {
 
     private String employeeUrl;
     private String employeeIdUrl;
-
-    @Autowired
-    private EmployeeService employeeService;
 
     @LocalServerPort
     private int port;
@@ -41,6 +35,13 @@ public class EmployeeServiceImplIntegrationTest {
         employeeIdUrl = "http://localhost:" + port + "/employee/{id}";
     }
 
+    //Since employeeId is defined as readonly (for documentation reasons), restTemplate can't put the employeeId on it during deserialization.
+    //That issue only happens here, in this test, so that's why I have extra logic to manually put it.
+    private String getEmployeeIdFromHttpEntity(HttpEntity<EmployeeDto> httpEntity) {
+        String employeeLocation = httpEntity.getHeaders().get("location").get(0);
+        return employeeLocation.substring(employeeLocation.lastIndexOf('/') + 1);
+    }
+
     @Test
     @DisplayName("Integration test for Employee endpoints")
     public void testCreateReadUpdate() {
@@ -49,14 +50,22 @@ public class EmployeeServiceImplIntegrationTest {
 
         // Create checks
         HttpEntity<EmployeeDto> request = new HttpEntity<>(testEmployee);
-        EmployeeDto createdEmployee = restTemplate.postForObject(employeeUrl, request, EmployeeDto.class);
+        ResponseEntity<EmployeeDto> createdEmployeeResponse = restTemplate.postForEntity(employeeUrl, request, EmployeeDto.class);
+        EmployeeDto createdEmployee = createdEmployeeResponse.getBody();
+
+        //Since employeeId is defined as readonly (for documentation reasons), restTemplate can't put the employeeId on it during deserialization.
+        //That issue only happens here, in this test, so that's why I have extra logic to manually put it.
+        createdEmployee.employeeId = getEmployeeIdFromHttpEntity(createdEmployeeResponse);
 
         assertNotNull(createdEmployee);
         assertNotNull(createdEmployee.employeeId);
         assertEmployeeEquivalence(testEmployee, createdEmployee);
 
         // Read checks
-        EmployeeDto readEmployee = restTemplate.getForObject(employeeIdUrl, EmployeeDto.class, createdEmployee.employeeId);
+        ResponseEntity<EmployeeDto> readEmployeeResponse = restTemplate.getForEntity(employeeIdUrl, EmployeeDto.class, createdEmployee.employeeId);
+        EmployeeDto readEmployee = readEmployeeResponse.getBody();
+        readEmployee.employeeId = getEmployeeIdFromHttpEntity(createdEmployeeResponse);
+
         assertNotNull(readEmployee);
         assertEquals(createdEmployee.employeeId, readEmployee.employeeId);
         assertEmployeeEquivalence(createdEmployee, readEmployee);
