@@ -129,6 +129,7 @@ In there you can find a description of every endpoint offered and how to use it.
 - [x] Paginate Compensation read endpoint
 
 #### To the future:
+- [ ] Add healthcheck
 - [ ] Implement security using JWT
 - [ ] Dockerize application
 - [ ] Host live demo on AWS
